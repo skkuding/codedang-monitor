@@ -13,13 +13,13 @@ jobs:
 
     - name: Load Docker Compose Files
       run: |
-        cp docker-compose.yml /home/skkuding/grafana
-        cp loki-config-stage.yml /home/skkuding/grafana
-        cp loki-config-test.yml /home/skkuding/grafana
+        cp docker-compose.yml ./grafana
+        cp loki-config-stage.yml ./grafana
+        cp loki-config-test.yml ./grafana
 
     - name: Set up Grafana Configuration
       run: |
-        cat <<EOF >> /home/skkuding/grafana/grafana.ini
+        cat <<EOF > ./grafana/grafana.ini
         # Non-sensitive configurations
         [server]
         protocol = http
@@ -42,5 +42,5 @@ jobs:
         
     - name: Run Docker Compose
       run: |
-        cd /home/skkuding/grafana
+        cd ./grafana
         docker-compose up -d
