@@ -1,0 +1,46 @@
+name: Local Deployment
+
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Load Docker Compose Files
+      run: |
+        cp docker-compose.yml /home/skkuding/grafana
+        cp loki-config-stage.yml /home/skkuding/grafana
+        cp loki-config-test.yml /home/skkuding/grafana
+
+    - name: Set up Grafana Configuration
+      run: |
+        cat <<EOF >> /home/skkuding/grafana/grafana.ini
+        # Non-sensitive configurations
+        [server]
+        protocol = http
+        http_port = 443
+        domain = grafana.codedang.com
+        enforce_domain = true
+        root_url = %(protocol)s://%(domain)s
+        serve_from_sub_path = true
+
+        # Sensitive configurations from GitHub Secrets
+        [smtp]
+        enabled = true
+        host = ${{ secrets.SMTP_HOST }}
+        user = ${{ secrets.SMTP_USER }}
+        password = ${{ secrets.SMTP_PASSWORD }}
+        from_address = ${{ secrets.FROM_ADDRESS }}
+        from_name = Grafana
+        startTLS_policy = MandatoryStartTLS
+        EOF
+        
+    - name: Run Docker Compose
+      run: |
+        cd /home/skkuding/grafana
+        docker-compose up -d
