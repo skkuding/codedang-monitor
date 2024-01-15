@@ -1,0 +1,46 @@
+version: "3.8"
+
+networks:
+  loki:
+
+services:
+  loki-test:
+    image: grafana/loki:2.9.0
+    container_name: loki-test
+    ports:
+      - "3100:3100"
+    volumes:
+      - '$PWD/loki-config-test.yml:/etc/loki/loki-config.yml'
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - loki
+
+  loki-stage:
+    image: grafana/loki:2.9.0
+    container_name: loki-stage
+    ports:
+      - "3200:3100"
+    volumes:
+      - '$PWD/loki-config-stage.yml:/etc/loki/loki-config.yml'
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - loki 
+
+  grafana:
+    image: grafana/grafana:latest
+    env_file: 
+      - .env
+    container_name: grafana
+    restart: unless-stopped
+      #    environment:
+      #      - TERM=linux
+      #      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-polystat-panel
+    ports:
+      - '3000:3000'
+    volumes:
+      - 'grafana_storage:/var/lib/grafana'
+      - '$PWD/grafana.ini:/etc/grafana/grafana.ini'
+    networks:
+      - loki
+volumes:
+  grafana_storage: {}
