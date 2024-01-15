@@ -11,33 +11,14 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Load Docker Compose Files
-      run: |
-        cp docker-compose.yml ./grafana
-        cp loki-config-stage.yml ./grafana
-        cp loki-config-test.yml ./grafana
-
     - name: Set up Grafana Configuration
       run: |
-        cat <<EOF > ./grafana/grafana.ini
-        # Non-sensitive configurations
-        [server]
-        protocol = http
-        http_port = 443
-        domain = grafana.codedang.com
-        enforce_domain = true
-        root_url = %(protocol)s://%(domain)s
-        serve_from_sub_path = true
-
+        cat <<EOF > ./grafana/.env
         # Sensitive configurations from GitHub Secrets
-        [smtp]
-        enabled = true
-        host = ${{ secrets.SMTP_HOST }}
-        user = ${{ secrets.SMTP_USER }}
-        password = ${{ secrets.SMTP_PASSWORD }}
-        from_address = ${{ secrets.FROM_ADDRESS }}
-        from_name = Grafana
-        startTLS_policy = MandatoryStartTLS
+        GF_SMTP_HOST = ${{ secrets.SMTP_HOST }}
+        GF_SMTP_USER = ${{ secrets.SMTP_USER }}
+        GF_SMTP_PASSWORD = ${{ secrets.SMTP_PASSWORD }}
+        GF_SMTP_FROM_ADDRESS = ${{ secrets.FROM_ADDRESS }}
         EOF
         
     - name: Run Docker Compose
