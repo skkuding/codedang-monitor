@@ -24,4 +24,4 @@ jobs:
     - name: Run Docker Compose
       run: |
         cd ./grafana
-        docker-compose up -d
+        docker compose up -d
