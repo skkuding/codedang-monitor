@@ -1,0 +1,19 @@
+name: 🚀 New feature proposal
+description: Propose a new feature to be added to this repository.
+labels: 
+body:
+  - type: textarea
+    attributes:
+      label: Describe the problem and solution
+      description: 해결하려는 문제와 그 해결책을 설명해주세요.
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Validations
+      description: Issue를 올리기 전 다음 사항들을 확인해주세요.
+      options:
+        - label: Read the [Contributing Guidelines](https://github.com/skkuding/next/blob/main/CONTRIBUTING.md)
+          required: true
+        - label: Check that there isn't already an issue
+          required: true
