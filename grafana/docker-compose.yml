@@ -8,7 +8,7 @@ services:
     image: grafana/loki:2.9.0
     container_name: loki-test
     ports:
-      - "3100:3100"
+      - "3199:3199"
     volumes:
       - '$PWD/loki-config-test.yml:/etc/loki/loki-config.yml'
     command: -config.file=/etc/loki/loki-config.yml
@@ -19,12 +19,24 @@ services:
     image: grafana/loki:2.9.0
     container_name: loki-stage
     ports:
-      - "3200:3100"
+      - "3101:3101"
     volumes:
       - '$PWD/loki-config-stage.yml:/etc/loki/loki-config.yml'
     command: -config.file=/etc/loki/loki-config.yml
     networks:
-      - loki 
+      - loki
+       
+  loki-aws:
+    image: grafana/loki:2.9.0
+    container_name: loki-aws
+    ports:
+      - "3199:3199"
+    volumes:
+      - '$PWD/loki-config-aws.yml:/etc/loki/loki-config.yml'
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - loki
+
 
   grafana:
     image: grafana/grafana:latest
