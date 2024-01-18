@@ -1,15 +1,15 @@
 grafana.codedang.com {
-	handle /lokiaws {
+	handle /lokiaws/* {
 		uri strip_prefix /lokiaws
 		reverse_proxy 127.0.0.1:3100
 	}
 	
-	handle /lokistage {
+	handle /lokistage/* {
 		uri strip_prefix /lokistage
 		reverse_proxy 127.0.0.1:3101
 	}
 
-	handle /lokitest {
+	handle /lokitest/* {
 		uri strip_prefix /lokitest
 		reverse_proxy 127.0.0.1:3199
 	}
