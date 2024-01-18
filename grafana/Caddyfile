@@ -1,0 +1,10 @@
+grafana.codedang.com {
+	handle /loki/* {
+		uri strip_prefix /loki
+		reverse_proxy 127.0.0.1:3200
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+}
