@@ -1,6 +1,5 @@
 name: 🚀 New feature proposal
 description: Propose a new feature to be added to this repository.
-labels: 
 body:
   - type: textarea
     attributes:
