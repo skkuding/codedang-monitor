@@ -15,40 +15,44 @@ services:
     network_mode: host
     
   loki-test:
+    profiles: ['deploy']
     image: grafana/loki:2.9.0
     container_name: loki-test
     ports:
       - "3199:3100"
     volumes:
-      - '$PWD/loki-config-test.yml:/etc/loki/loki-config.yml'
+      - '$PWD/grafana/loki-config-test.yml:/etc/loki/loki-config.yml'
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - loki
 
   loki-stage:
+    profiles: ['deploy']
     image: grafana/loki:2.9.0
     container_name: loki-stage
     ports:
       - "3101:3100"
     volumes:
-      - '$PWD/loki-config-stage.yml:/etc/loki/loki-config.yml'
+      - '$PWD/grafana/loki-config-stage.yml:/etc/loki/loki-config.yml'
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - loki
 
   loki-aws:
+    profiles: ['deploy']
     image: grafana/loki:2.9.0
     container_name: loki-aws
     ports:
       - "3100:3100"
     volumes:
-      - '$PWD/loki-config-aws.yml:/etc/loki/loki-config.yml'
+      - '$PWD/grafana/loki-config-aws.yml:/etc/loki/loki-config.yml'
     command: -config.file=/etc/loki/loki-config.yml
     networks:
       - loki
 
 
   grafana:
+    profiles: ['deploy']
     image: grafana/grafana:latest
     env_file: 
       - .env
@@ -61,7 +65,7 @@ services:
       - '3000:3000'
     volumes:
       - 'grafana_storage:/var/lib/grafana'
-      - '$PWD/grafana.ini:/etc/grafana/grafana.ini'
+      - '$PWD/grafana/grafana.ini:/etc/grafana/grafana.ini'
     networks:
       - loki
   
