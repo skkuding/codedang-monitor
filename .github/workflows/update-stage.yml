@@ -11,17 +11,42 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Grafana Configuration
+    - name: Load dotenv from secret for Grafana Configuration
       run: |
-        cat <<EOF > ./grafana/.env
+        cat <<EOF > .env
         # Sensitive configurations from GitHub Secrets
         GF_SMTP_HOST = ${{ secrets.SMTP_HOST }}
         GF_SMTP_USER = ${{ secrets.SMTP_USER }}
         GF_SMTP_PASSWORD = ${{ secrets.SMTP_PASSWORD }}
         GF_SMTP_FROM_ADDRESS = ${{ secrets.FROM_ADDRESS }}
         EOF
+
+    - name: Check if containers are running
+      id: check-container
+      run: |
+        {
+          echo 'stdout<<EOF'
+          docker compose --profile log ps -q
+          echo EOF
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Initialize containers
+      if: steps.check-container.outputs.stdout == ''
+      run: |
+        docker compose --profile caddy up -d --no-recreate
+        docker compose --profile log up -d --no-recreate
         
     - name: Run Docker Compose
       run: |
-        cd ./grafana
-        docker compose up -d
+        docker compose --profile log up -d
+    
+    - name: Copy Caddyfile into Caddy Container
+      run: |
+        docker cp ./Caddyfile caddy:/etc/caddy/Caddyfile
+      
+    - name: Gracefully reload Caddy
+      run: |
+        docker exec -w /etc/caddy caddy caddy reload
+    
+    - name: Remove unused docker storages
+      run: docker system prune -a -f --volumes
