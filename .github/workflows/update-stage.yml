@@ -10,10 +10,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
-      with:
-        sparse-checkout: |
-          docker-compose.yml
-          Caddyfile
 
     - name: Load dotenv from secret for Grafana Configuration
       run: |
@@ -30,21 +26,19 @@ jobs:
       run: |
         {
           echo 'stdout<<EOF'
-          docker compose --profile deploy ps -q
+          docker compose --profile log ps -q
           echo EOF
         } >> "$GITHUB_OUTPUT"
 
     - name: Initialize containers
       if: steps.check-container.outputs.stdout == ''
       run: |
-        docker compose --profile deploy up -d --no-recreate
+        docker compose --profile caddy up -d --no-recreate
+        dockder compose --profile log up -d --no-recreate
         
     - name: Run Docker Compose
       run: |
-        docker compose --profile deploy up loki-test -d --no-deps
-        docker compose --profile deploy up loki-stage -d --no-deps
-        docker compose --profile deploy up loki-aws -d --no-deps
-        docker compose --profile deploy up grafana -d --no-deps
+        docker compose --profile log up -d
     
     - name: Copy Caddyfile into Caddy Container
       run: |
