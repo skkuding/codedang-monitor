@@ -34,7 +34,7 @@ jobs:
       if: steps.check-container.outputs.stdout == ''
       run: |
         docker compose --profile caddy up -d --no-recreate
-        dockder compose --profile log up -d --no-recreate
+        docker compose --profile log up -d --no-recreate
         
     - name: Run Docker Compose
       run: |
