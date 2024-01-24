@@ -23,11 +23,21 @@ query_range:
         enabled: true
         max_size_mb: 100
 
+storage_config:
+  aws:
+    s3: http://minioadmin:minioadmin@minio.:9000/loki-aws
+    s3forcepathstyle: true
+  boltdb_shipper:
+    active_index_directory: /loki/boltdb-shipper-active
+    cache_location: /loki/boltdb-shipper-cache
+    resync_interval: 5s
+    shared_store: s3
+
 schema_config:
   configs:
     - from: 2020-10-24
       store: boltdb-shipper
-      object_store: filesystem
+      object_store: aws
       schema: v11
       index:
         prefix: index_
@@ -35,7 +45,6 @@ schema_config:
 
 ruler:
   alertmanager_url: http://localhost:9093
-
 # By default, Loki will send anonymous, but uniquely-identifiable usage and configuration
 # analytics to Grafana Labs. These statistics are sent to https://stats.grafana.org/
 #
