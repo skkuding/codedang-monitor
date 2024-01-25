@@ -33,6 +33,13 @@ schema_config:
         prefix: index_
         period: 24h
 
+ingester:
+  chunk_idle_period: 1m # Flush chunks that are idle for 1 minute.
+  max_chunk_age: 1h # Flush chunks older than 1 hour.
+  chunk_target_size: 1048576 # Target size of 1MB before flushing.
+  chunk_retain_period: 30s # Retain chunks for 30 seconds in memory after flushing.
+  max_transfer_retries: 0
+
 storage_config:
   boltdb_shipper:
     active_index_directory: /loki/index
