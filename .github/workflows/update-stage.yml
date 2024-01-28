@@ -19,6 +19,8 @@ jobs:
           GF_SMTP_USER = ${{ secrets.SMTP_USER }}
           GF_SMTP_PASSWORD = ${{ secrets.SMTP_PASSWORD }}
           GF_SMTP_FROM_ADDRESS = ${{ secrets.FROM_ADDRESS }}
+          MINIO_ROOT_USER = ${{ secrets.MINIO_ROOT_USER }}
+          MINIO_ROOT_PASSWORD = ${{ secrets.MINIO_ROOT_PASSWORD }}
           EOF
 
       - name: Check if containers are running
