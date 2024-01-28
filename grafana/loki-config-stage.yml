@@ -41,18 +41,24 @@ ingester:
   max_transfer_retries: 0
 
 storage_config:
+  aws:
+    s3: http://${MINIO_ROOT_PASSWORD}:${MINIO_ROOT_USER}@minio.:9000/loki-stage
+    s3forcepathstyle: true
   boltdb_shipper:
-    active_index_directory: /loki/index
-    cache_location: /loki/index_cache
+    active_index_directory: /loki/boltdb-shipper-active
+    cache_location: /loki/boltdb-shipper-cache
     resync_interval: 5s
     shared_store: s3
-  aws:
-    endpoint: minio:9000
-    insecure: true
-    bucketnames: loki-stage
-    access_key_id: minioadmin
-    secret_access_key: minioadmin
-    s3forcepathstyle: true
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: aws
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
 
 ruler:
   alertmanager_url: http://localhost:9093

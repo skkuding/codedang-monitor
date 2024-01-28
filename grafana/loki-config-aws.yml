@@ -32,7 +32,7 @@ ingester:
 
 storage_config:
   aws:
-    s3: http://minioadmin:minioadmin@minio.:9000/loki-aws
+    s3: http://${MINIO_ROOT_PASSWORD}:${MINIO_ROOT_USER}@minio.:9000/loki-aws
     s3forcepathstyle: true
   boltdb_shipper:
     active_index_directory: /loki/boltdb-shipper-active

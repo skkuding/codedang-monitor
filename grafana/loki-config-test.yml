@@ -30,29 +30,25 @@ ingester:
   chunk_retain_period: 30s # Retain chunks for 30 seconds in memory after flushing.
   max_transfer_retries: 0
 
+storage_config:
+  aws:
+    s3: http://${MINIO_ROOT_PASSWORD}:${MINIO_ROOT_USER}@minio.:9000/loki-test
+    s3forcepathstyle: true
+  boltdb_shipper:
+    active_index_directory: /loki/boltdb-shipper-active
+    cache_location: /loki/boltdb-shipper-cache
+    resync_interval: 5s
+    shared_store: s3
+
 schema_config:
   configs:
     - from: 2020-10-24
       store: boltdb-shipper
-      object_store: s3 # MinIO로 로그 데이터 저장
+      object_store: aws
       schema: v11
       index:
         prefix: index_
         period: 24h
-
-storage_config:
-  boltdb_shipper:
-    active_index_directory: /loki/index
-    cache_location: /loki/index_cache
-    resync_interval: 5s
-    shared_store: s3
-  aws:
-    endpoint: minio:9000
-    insecure: true
-    bucketnames: loki-test
-    access_key_id: minioadmin
-    secret_access_key: minioadmin
-    s3forcepathstyle: true
 
 ruler:
   alertmanager_url: http://localhost:9093
