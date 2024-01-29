@@ -1,5 +1,8 @@
 grafana.codedang.com {
 	handle /lokiaws/* {
+		@blocked not remote_ip {$AWS_REQ_IP}
+		respond @blocked "Forbidden" 403
+
 		uri strip_prefix /lokiaws
 		reverse_proxy 127.0.0.1:3100
 	}
