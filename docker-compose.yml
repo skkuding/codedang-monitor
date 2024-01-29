@@ -42,7 +42,7 @@ services:
       - "3199:3100"
     volumes:
       - "$PWD/grafana/loki-config-test.yml:/etc/loki/loki-config.yml"
-    command: -config.file=/etc/loki/loki-config.yml
+    command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
 
@@ -57,7 +57,7 @@ services:
       - "3101:3100"
     volumes:
       - "$PWD/grafana/loki-config-stage.yml:/etc/loki/loki-config.yml"
-    command: -config.file=/etc/loki/loki-config.yml
+    command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
 
@@ -70,7 +70,7 @@ services:
       - "3100:3100"
     volumes:
       - "$PWD/grafana/loki-config-aws.yml:/etc/loki/loki-config.yml"
-    command: -config.file=/etc/loki/loki-config.yml
+    command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
 
