@@ -21,25 +21,29 @@ jobs:
         GF_SMTP_FROM_ADDRESS = ${{ secrets.FROM_ADDRESS }}
         EOF
 
-    - name: Check if log containers are running
-      id: check-container
+    - name: Check if Caddy containers are running
+      id: check-caddy-container
       run: |
         {
           echo 'stdout<<EOF'
-          docker compose --profile log ps -q
+          docker compose --profile caddy ps -q
           echo EOF
         } >> "$GITHUB_OUTPUT"
-    
-    - name: Set up Caddy
+
+    - name: when caddy container down, caddy up
+      if: steps.check-caddy-container.outputs.stdout == ''
+      run: |
+        docker compose --profile caddy up -d --no-recreate
+
+    - name: Copy Caddyfile into Caddy Container
       env:
         AWS_REQ_IP: ${{ secrets.AWS_NAT_IP }}
       run: |
-        docker compose --profile caddy up -d
-
-    - name: Initialize containers
-      if: steps.check-container.outputs.stdout == ''
+        docker cp ./Caddyfile caddy:/etc/caddy/Caddyfile
+    
+    - name: Gracefully reload Caddy
       run: |
-        docker compose --profile log up -d --no-recreate
+        docker exec -w /etc/caddy caddy caddy reload
         
     - name: Run Docker Compose Of Log
       run: |
