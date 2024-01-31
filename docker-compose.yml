@@ -29,8 +29,26 @@ services:
       - "9000:9000"
       - "9001:9001"
     command: server data --address ':9000' --console-address ':9001'
-
     shm_size: "1gb"
+
+  createbuckets:
+    profiles: ["minio"]
+    image: minio/mc
+    networks:
+      - loki
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_USER};
+      /usr/bin/mc mb minio/loki-aws;
+      /usr/bin/mc mb minio/loki-stage;
+      /usr/bin/mc mb minio/loki-test;
+      /usr/bin/mc policy set public minio/loki-aws;
+      /usr/bin/mc policy set public minio/loki-test;
+      /usr/bin/mc policy set public minio/loki-stage;
+      exit 0;
+      "
 
   loki-test:
     profiles: ["loki"]
