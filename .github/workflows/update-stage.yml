@@ -21,32 +21,31 @@ jobs:
         GF_SMTP_FROM_ADDRESS = ${{ secrets.FROM_ADDRESS }}
         EOF
 
-    - name: Check if containers are running
-      id: check-container
+    - name: Check if Caddy containers are running
+      id: check-caddy-container
       run: |
         {
           echo 'stdout<<EOF'
-          docker compose --profile log ps -q
+          docker compose --profile caddy ps -q
           echo EOF
         } >> "$GITHUB_OUTPUT"
 
-    - name: Initialize containers
-      if: steps.check-container.outputs.stdout == ''
+    - name: when caddy container down, caddy up
+      if: steps.check-caddy-container.outputs.stdout == ''
       run: |
         docker compose --profile caddy up -d --no-recreate
-        docker compose --profile log up -d --no-recreate
-        
-    - name: Run Docker Compose
-      run: |
-        docker compose --profile log up -d
-    
+
     - name: Copy Caddyfile into Caddy Container
+      env:
+        AWS_REQ_IP: ${{ secrets.AWS_NAT_IP }}
       run: |
         docker cp ./Caddyfile caddy:/etc/caddy/Caddyfile
-      
+    
     - name: Gracefully reload Caddy
       run: |
         docker exec -w /etc/caddy caddy caddy reload
+        
+    - name: Run Docker Compose Of Log
+      run: |
+        docker compose --profile log up -d
     
-    - name: Remove unused docker storages
-      run: docker system prune -a -f --volumes
