@@ -37,9 +37,13 @@ jobs:
         run: |
           docker compose --profile caddy up -d --no-recreate
 
-      - name: Copy Caddyfile into Caddy Container
+      - name: Set Caddyfile Environment Variables
         env:
-          AWS_REQ_IP: ${{ secrets.AWS_NAT_IP }}
+          AWS_REQ_IP: ${{ secrets.AWS_REQ_IP}}
+        run: |
+          sed -i "s/{$AWS_REQ_IP}/$AWS_REQ_IP/" ./Caddyfile
+
+      - name: Copy Caddyfile into Caddy Container
         run: |
           docker cp ./Caddyfile caddy:/etc/caddy/Caddyfile
 
