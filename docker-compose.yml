@@ -15,6 +15,7 @@ services:
     network_mode: host
 
   minio:
+    profiles: ["minio"]
     container_name: minio
     image: minio/minio:latest
     volumes:
