@@ -32,6 +32,43 @@ jobs:
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
+      - name: Check if Loki containers are running
+        id: check-container
+        run: |
+          {
+            echo 'stdout<<EOF'
+            docker compose --profile loki ps -q
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check if Grafana console container is running
+        id: check-grafana_console_container
+        run: |
+          {
+            echo 'stdout<<EOF'
+            docker compose --profile grafana-console ps -q
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Initialize caddy-loki containers
+        if: steps.check-container.outputs.stdout == ''
+        run: |
+          docker compose --profile caddy up -d --no-recreate
+          docker compose --profile loki up -d --no-recreate
+
+      - name: Run Docker Compose Of Loki
+        run: |
+          docker compose --profile loki up -d
+
+      - name: Run Docker Compose Of Minio
+        run: |
+          docker compose --profile minio up -d
+
+      - name: Initialize grafana container
+        if: steps.check-grafana_console_container.outputs.stdout == ''
+        run: |
+          docker compose --profile grafana-console up -d --no-recreate
+
       - name: when caddy container down, caddy up
         if: steps.check-caddy-container.outputs.stdout == ''
         run: |
@@ -49,6 +86,5 @@ jobs:
         run: |
           docker exec -w /etc/caddy caddy caddy reload
 
-      - name: Run Docker Compose Of Log
-        run: |
-          docker compose --profile log up -d
+      - name: Remove unused docker storages
+        run: docker system prune -a -f --volumes
