@@ -23,16 +23,6 @@ query_range:
         enabled: true
         max_size_mb: 100
 
-schema_config:
-  configs:
-    - from: 2020-10-24
-      store: boltdb-shipper
-      object_store: s3 # MinIO로 로그 데이터 저장
-      schema: v11
-      index:
-        prefix: index_
-        period: 24h
-
 ingester:
   chunk_idle_period: 1m # Flush chunks that are idle for 1 minute.
   max_chunk_age: 1h # Flush chunks older than 1 hour.
