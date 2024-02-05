@@ -32,11 +32,6 @@ jobs:
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
-      - name: Initialize caddy-loki containers
-        if: steps.check-container.outputs.stdout == ''
-        run: |
-          docker compose --profile caddy up -d --no-recreate
-
       - name: Run Docker Compose Of Loki
         run: |
           docker compose --profile loki up -d --no-recreate
