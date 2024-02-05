@@ -34,6 +34,8 @@ services:
   createbuckets:
     profiles: ["minio"]
     image: minio/mc
+    volumes:
+      - minio_data_volume:/data
     networks:
       - loki
     depends_on:
@@ -41,12 +43,12 @@ services:
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-      /usr/bin/mc mb minio/loki-aws;
-      /usr/bin/mc mb minio/loki-stage;
-      /usr/bin/mc mb minio/loki-test;
-      /usr/bin/mc policy set public minio/loki-aws;
-      /usr/bin/mc policy set public minio/loki-stage;
-      /usr/bin/mc policy set public minio/loki-test;
+      /usr/bin/mc mb data/loki-aws;
+      /usr/bin/mc mb data/loki-stage;
+      /usr/bin/mc mb data/loki-test;
+      /usr/bin/mc anonymous set public data/loki-aws;
+      /usr/bin/mc anonymous set public data/loki-stage;
+      /usr/bin/mc anonymous set public data/loki-test;
       exit 0;
       "
 
