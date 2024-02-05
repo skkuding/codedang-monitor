@@ -86,7 +86,9 @@ services:
     profiles: ["loki"]
     image: grafana/loki:2.9.0
     container_name: loki-aws
-
+    environment:
+      - MINIO_ROOT_PASSWORD
+      - MINIO_ROOT_USER
     ports:
       - "3100:3100"
     volumes:
