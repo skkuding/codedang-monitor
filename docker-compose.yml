@@ -101,14 +101,31 @@ services:
     profiles: ["metric"]
     image: prom/prometheus:latest
     container_name: prometheus
-    volumes:
-      - "$PWD/grafana/prometheus.yml:/etc/prometheus/prometheus.yml"
-    command: --config.file=/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
+    volumes:
+      - "$PWD/grafana/prometheus.yml:/etc/prometheus/prometheus.yml"
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-remote-write-receiver'
+    
+
+  agent:
+    profiles: ["metric", "trace"]
+    image: grafana/agent:latest
+    container_name: agent
+    environment:
+      - AGENT_MODE=flow
+    ports:
+      - "12345:12345"
+      - "4318:4318"   # OTLP over HTTP receiver
+    volumes: 
+      - $PWD/grafana/config.river:/etc/agent/config.river
+    command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
 
   grafana:
-    profiles: ["grafana-console"]
+    profiles: ["grafana-console", "metric", "trace"]
     image: grafana/grafana:latest
     env_file:
       - .env
