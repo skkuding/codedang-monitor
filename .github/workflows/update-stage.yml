@@ -40,6 +40,10 @@ jobs:
         run: |
           docker compose --profile minio up -d --no-recreate
 
+      - name: Run Docker Compose for Metric
+        run: |
+          docker compose --profile metric up -d --no-recreate
+
       - name: Initialize grafana container
         run: |
           docker compose --profile grafana-console up -d --no-recreate
