@@ -16,3 +16,7 @@ grafana.codedang.com {
 		reverse_proxy 127.0.0.1:3000
 	}
 }
+
+sentry.codedang.com {
+        reverse_proxy 127.0.0.1:9876
+}
