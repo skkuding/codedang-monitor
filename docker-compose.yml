@@ -62,7 +62,7 @@ services:
     ports:
       - "3199:3100"
     volumes:
-      - "$PWD/grafana/loki-config-test.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config-test.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
@@ -77,7 +77,7 @@ services:
     ports:
       - "3101:3100"
     volumes:
-      - "$PWD/grafana/loki-config-stage.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config-stage.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
@@ -92,7 +92,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - "$PWD/grafana/loki-config-aws.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config-aws.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
@@ -104,7 +104,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "$PWD/grafana/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "$PWD/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
     command: 
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -121,7 +121,7 @@ services:
       - "12345:12345"
       - "4318:4318"   # OTLP over HTTP receiver
     volumes: 
-      - $PWD/grafana/config.river:/etc/agent/config.river
+      - $PWD/config/agent/config.river:/etc/agent/config.river
     command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
 
   grafana:
@@ -139,7 +139,7 @@ services:
       - "3000:3000"
     volumes:
       - "grafana_storage:/var/lib/grafana"
-      - "$PWD/grafana/grafana.ini:/etc/grafana/grafana.ini"
+      - "$PWD/config/grafana/grafana.ini:/etc/grafana/grafana.ini"
     networks:
       - loki
 
