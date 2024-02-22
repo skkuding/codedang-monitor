@@ -104,9 +104,9 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus.yml"
+      - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
     command: 
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus-config.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.enable-remote-write-receiver'
     
