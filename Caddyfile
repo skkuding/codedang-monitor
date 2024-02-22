@@ -12,6 +12,23 @@ grafana.codedang.com {
 		reverse_proxy 127.0.0.1:3199
 	}
 
+	handle /agent {
+		handle /metric {
+			uri strip_prefix /agent/metric
+			reverse_proxy 127.0.0.1:4318/v1/metrics
+		}
+
+		handle {
+			uri strip_prefix /agent
+			reverse_proxy 127.0.0.1:12345
+		}
+	}
+
+	handle /prometheus {
+		uri strip_prefix /prometheus
+		reverse_proxy 127.0.0.1:9090
+	}
+
 	handle {
 		reverse_proxy 127.0.0.1:3000
 	}

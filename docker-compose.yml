@@ -15,7 +15,7 @@ services:
     network_mode: host
 
   minio:
-    profiles: ["minio"]
+    profiles: ["log"]
     container_name: minio
     image: minio/minio:latest
     volumes:
@@ -32,7 +32,7 @@ services:
     shm_size: "1gb"
 
   createbuckets:
-    profiles: ["minio"]
+    profiles: ["log"]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
@@ -53,7 +53,7 @@ services:
       "
 
   loki-test:
-    profiles: ["loki"]
+    profiles: ["log"]
     image: grafana/loki:2.9.0
     container_name: loki-test
     environment:
@@ -62,13 +62,13 @@ services:
     ports:
       - "3199:3100"
     volumes:
-      - "$PWD/grafana/loki-config-test.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config-test.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
 
   loki-stage:
-    profiles: ["loki"]
+    profiles: ["log"]
     image: grafana/loki:2.9.0
     container_name: loki-stage
     environment:
@@ -77,13 +77,13 @@ services:
     ports:
       - "3101:3100"
     volumes:
-      - "$PWD/grafana/loki-config-stage.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config-stage.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
 
   loki-aws:
-    profiles: ["loki"]
+    profiles: ["log"]
     image: grafana/loki:2.9.0
     container_name: loki-aws
     environment:
@@ -92,13 +92,40 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - "$PWD/grafana/loki-config-aws.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config-aws.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     networks:
       - loki
 
+  prometheus:
+    profiles: ["metric"]
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - "$PWD/config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-remote-write-receiver'
+    
+
+  agent:
+    profiles: ["metric", "trace"]
+    image: grafana/agent:latest
+    container_name: agent
+    environment:
+      - AGENT_MODE=flow
+    ports:
+      - "12345:12345"
+      - "4318:4318"   # OTLP over HTTP receiver
+    volumes: 
+      - $PWD/config/agent/config.river:/etc/agent/config.river
+    command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
+
   grafana:
-    profiles: ["grafana-console"]
+    profiles: ["log", "metric", "trace"]
     image: grafana/grafana:latest
     env_file:
       - .env
@@ -112,7 +139,7 @@ services:
       - "3000:3000"
     volumes:
       - "grafana_storage:/var/lib/grafana"
-      - "$PWD/grafana/grafana.ini:/etc/grafana/grafana.ini"
+      - "$PWD/config/grafana/grafana.ini:/etc/grafana/grafana.ini"
     networks:
       - loki
 
