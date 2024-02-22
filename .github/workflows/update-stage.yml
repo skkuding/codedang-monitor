@@ -32,21 +32,17 @@ jobs:
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
-      - name: Run Docker Compose Of Loki
+      - name: Run Docker Compose for Log (Loki, Minio, Grafana)
         run: |
-          docker compose --profile loki up -d --no-recreate
+          docker compose --profile log up -d --no-recreate
 
-      - name: Run Docker Compose Of Minio
+      - name: Run Docker Compose Of Trace (Agent, Tempo, Grafana)
         run: |
-          docker compose --profile minio up -d --no-recreate
+          docker compose --profile trace up -d --no-recreate
 
-      - name: Run Docker Compose for Metric
+      - name: Run Docker Compose for Metric (Agent, Prometheus, Grafana)
         run: |
           docker compose --profile metric up -d --no-recreate
-
-      - name: Initialize grafana container
-        run: |
-          docker compose --profile grafana-console up -d --no-recreate
 
       - name: when caddy container down, caddy up
         if: steps.check-caddy-container.outputs.stdout == ''

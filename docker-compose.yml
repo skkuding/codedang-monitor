@@ -15,7 +15,7 @@ services:
     network_mode: host
 
   minio:
-    profiles: ["minio"]
+    profiles: ["log"]
     container_name: minio
     image: minio/minio:latest
     volumes:
@@ -32,7 +32,7 @@ services:
     shm_size: "1gb"
 
   createbuckets:
-    profiles: ["minio"]
+    profiles: ["log"]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
@@ -53,7 +53,7 @@ services:
       "
 
   loki-test:
-    profiles: ["loki"]
+    profiles: ["log"]
     image: grafana/loki:2.9.0
     container_name: loki-test
     environment:
@@ -68,7 +68,7 @@ services:
       - loki
 
   loki-stage:
-    profiles: ["loki"]
+    profiles: ["log"]
     image: grafana/loki:2.9.0
     container_name: loki-stage
     environment:
@@ -83,7 +83,7 @@ services:
       - loki
 
   loki-aws:
-    profiles: ["loki"]
+    profiles: ["log"]
     image: grafana/loki:2.9.0
     container_name: loki-aws
     environment:
@@ -125,7 +125,7 @@ services:
     command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
 
   grafana:
-    profiles: ["grafana-console", "metric", "trace"]
+    profiles: ["log", "metric", "trace"]
     image: grafana/grafana:latest
     env_file:
       - .env
