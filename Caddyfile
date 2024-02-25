@@ -13,7 +13,7 @@ grafana.codedang.com {
 	}
 
 	handle /agent* {
-		handle /agent/metric* {
+		handle /metric* {
 			uri strip_prefix /agent/metric
 			reverse_proxy 127.0.0.1:4318/v1/metrics
 		}
