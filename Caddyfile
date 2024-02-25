@@ -1,4 +1,8 @@
 grafana.codedang.com {
+	log {
+		format console
+	}
+	
 	handle /lokiaws/* {
 		@blocked not remote_ip {$AWS_REQ_IP}
 		respond @blocked "Forbidden" 403
