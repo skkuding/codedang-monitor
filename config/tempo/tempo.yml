@@ -1,0 +1,55 @@
+stream_over_http_enabled: true
+multitenancy_enabled: true
+
+server:
+  http_listen_port: 3200
+  log_level: info
+
+query_frontend:
+  search:
+    duration_slo: 5s
+    throughput_bytes_slo: 1.073741824e+09
+  trace_by_id:
+    duration_slo: 5s
+
+distributor:
+  receivers:                           # this configuration will listen on all ports and protocols that tempo is capable of.
+    otlp:
+      protocols:
+        # http:
+        grpc:
+
+ingester:
+  max_block_duration: 5m               # cut the headblock when this much time passes. this is being set for demo purposes and should probably be left alone normally
+
+compactor:
+  compaction:
+    block_retention: 1h                # overall Tempo trace retention. set for demo purposes
+
+# metrics_generator:
+#   registry:
+#     external_labels:
+#       source: tempo
+#       cluster: docker-compose
+#   storage:
+#     path: /tmp/tempo/generator/wal
+#     remote_write:
+#       - url: http://prometheus:9090/api/v1/write
+#         send_exemplars: true
+
+storage:
+  trace:
+    backend: s3                     # backend configuration to use
+    wal:
+      path: /tmp/tempo/wal             # where to store the the wal locally
+    s3:
+      bucket: tempo                    # how to store data in s3
+      endpoint: minio:9000
+      access_key: ${MINIO_ROOT_USER}
+      secret_key: ${MINIO_ROOT_USER}
+      insecure: true
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics] # enables metrics generator
