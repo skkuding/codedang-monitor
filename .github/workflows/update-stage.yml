@@ -31,23 +31,23 @@ jobs:
             docker compose --profile caddy ps -q
             echo EOF
           } >> "$GITHUB_OUTPUT"
-
-      - name: Run Docker Compose for Log (Loki, Minio, Grafana)
-        run: |
-          docker compose --profile log up -d --no-recreate
-
-      - name: Run Docker Compose Of Trace (Agent, Tempo, Grafana)
-        run: |
-          docker compose --profile trace up -d --no-recreate
-
-      - name: Run Docker Compose for Metric (Agent, Prometheus, Grafana)
-        run: |
-          docker compose --profile metric up -d --no-recreate
-
+          
       - name: when caddy container down, caddy up
         if: steps.check-caddy-container.outputs.stdout == ''
         run: |
-          docker compose --profile caddy up -d --no-recreate
+          docker compose --profile caddy up -d
+
+      - name: Run Docker Compose for Log (Loki, Minio, Grafana)
+        run: |
+          docker compose --profile log up -d
+
+      - name: Run Docker Compose Of Trace (Agent, Tempo, Grafana)
+        run: |
+          docker compose --profile trace up -d 
+
+      - name: Run Docker Compose for Metric (Agent, Prometheus, Grafana)
+        run: |
+          docker compose --profile metric up -d 
 
       - name: Set Caddyfile Environment Variables
         run: |
