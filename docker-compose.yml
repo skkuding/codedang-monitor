@@ -100,7 +100,7 @@ services:
       - '--web.enable-remote-write-receiver'
     
   tempo:
-    prifiles: ["trace"]
+    profiles: ["trace"]
     image: grafana/tempo:latest
     container_name: tempo
     ports:
