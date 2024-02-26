@@ -15,7 +15,7 @@ distributor:
   receivers:                           # this configuration will listen on all ports and protocols that tempo is capable of.
     otlp:
       protocols:
-        # http:
+        http:
         grpc:
 
 ingester:
