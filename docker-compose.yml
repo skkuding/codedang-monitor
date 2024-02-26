@@ -12,7 +12,7 @@ services:
     network_mode: host
 
   minio:
-    profiles: ["log"]
+    profiles: ["log", "trace"]
     container_name: minio
     image: minio/minio:latest
     volumes:
