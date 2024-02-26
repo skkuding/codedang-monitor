@@ -110,7 +110,8 @@ services:
     volumes:
       - $PWD/config/tempo/tempo.yml:/etc/tempo.yml
     command: 
-      - "-config.file=/etc/tempo.yml -config.expand-env=true" 
+      - "-config.file=/etc/tempo.yml"
+      - "-config.expand-env=true" 
     depends_on:
       - minio
 
