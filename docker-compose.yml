@@ -27,7 +27,7 @@ services:
     shm_size: "1gb"
 
   createbuckets:
-    profiles: ["log"]
+    profiles: ["log", "trace"]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
@@ -39,6 +39,8 @@ services:
       /usr/bin/mc mb data/loki-aws;
       /usr/bin/mc mb data/loki-stage;
       /usr/bin/mc mb data/loki-test;
+      /usr/bin/mc mb data/tempo;
+      /usr/bin/mc anonymous set public data/tempo;
       /usr/bin/mc anonymous set public data/loki-aws;
       /usr/bin/mc anonymous set public data/loki-stage;
       /usr/bin/mc anonymous set public data/loki-test;
@@ -97,19 +99,33 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.enable-remote-write-receiver'
     
-
-  agent:
-    profiles: ["metric", "trace"]
-    image: grafana/agent:latest
-    container_name: agent
-    environment:
-      - AGENT_MODE=flow
+  tempo:
+    prifiles: ["trace"]
+    image: grafana/tempo:latest
+    container_name: tempo
     ports:
-      - "12345:12345"
-      - "4318:4318"   # OTLP over HTTP receiver
-    volumes: 
-      - $PWD/config/agent/config.river:/etc/agent/config.river
-    command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
+      - "3200:3200"   # tempo
+      - "4317:4317"  # otlp grpc
+      - "4318:4318"  # otlp http
+    volumes:
+      - $PWD/config/tempo/tempo.yml:/etc/tempo.yml
+    command: 
+      - "-config.file=/etc/tempo.yml -config.expand-env=true" 
+    depends_on:
+      - minio
+
+  # agent:
+  #   profiles: ["metric", "trace"]
+  #   image: grafana/agent:latest
+  #   container_name: agent
+  #   environment:
+  #     - AGENT_MODE=flow
+  #   ports:
+  #     - "12345:12345"
+  #     - "4318:4318"   # OTLP over HTTP receiver
+  #   volumes: 
+  #     - $PWD/config/agent/config.river:/etc/agent/config.river
+  #   command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
 
   grafana:
     profiles: ["log", "metric", "trace"]
