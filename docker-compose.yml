@@ -94,6 +94,7 @@ services:
       - "9090:9090"
     volumes:
       - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
+      - prometheus_data_volume:/prometheus
     command: 
       - '--config.file=/etc/prometheus/prometheus-config.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -151,3 +152,4 @@ services:
 volumes:
   grafana_storage: {}
   minio_data_volume:
+  prometheus_data_volume:
