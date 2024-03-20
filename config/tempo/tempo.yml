@@ -26,15 +26,6 @@ compactor:
     block_retention: 1h                # overall Tempo trace retention. set for demo purposes
 
 # metrics_generator:
-#   registry:
-#     external_labels:
-#       source: tempo
-#       cluster: docker-compose
-#   storage:
-#     path: /tmp/tempo/generator/wal
-#     remote_write:
-#       - url: http://prometheus:9090/api/v1/write
-#         send_exemplars: true
 
 storage:
   trace:
@@ -47,8 +38,3 @@ storage:
       access_key: ${MINIO_ROOT_USER}
       secret_key: ${MINIO_ROOT_PASSWORD}
       insecure: true
-
-overrides:
-  defaults:
-    metrics_generator:
-      processors: [service-graphs, span-metrics] # enables metrics generator
