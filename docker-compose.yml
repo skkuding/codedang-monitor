@@ -119,19 +119,6 @@ services:
     depends_on:
       - minio
 
-  # agent:
-  #   profiles: ["metric", "trace"]
-  #   image: grafana/agent:latest
-  #   container_name: agent
-  #   environment:
-  #     - AGENT_MODE=flow
-  #   ports:
-  #     - "12345:12345"
-  #     - "4318:4318"   # OTLP over HTTP receiver
-  #   volumes: 
-  #     - $PWD/config/agent/config.river:/etc/agent/config.river
-  #   command: run --server.http.listen-addr=0.0.0.0:12345 /etc/agent/config.river
-
   grafana:
     profiles: ["log", "metric", "trace"]
     image: grafana/grafana:latest
@@ -140,9 +127,6 @@ services:
     container_name: grafana
     restart:
       unless-stopped
-      #    environment:
-      #      - TERM=linux
-      #      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-polystat-panel
     ports:
       - "3000:3000"
     volumes:
