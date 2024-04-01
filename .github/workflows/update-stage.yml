@@ -23,31 +23,32 @@ jobs:
           MINIO_ROOT_PASSWORD = ${{ secrets.MINIO_ROOT_PASSWORD }}
           EOF
 
-      - name: Check if Caddy containers are running
-        id: check-caddy-container
+      - name: Check if initial containers are running
+        id: check-start-up-container
         run: |
           {
             echo 'stdout<<EOF'
-            docker compose --profile caddy ps -q
+            docker compose --profile start-up ps -q
             echo EOF
           } >> "$GITHUB_OUTPUT"
           
-      - name: when caddy container down, caddy up
-        if: steps.check-caddy-container.outputs.stdout == ''
-        run: |
-          docker compose --profile caddy up -d
+      - name: when initial containers are not running, start all containers
+        if: steps.check-start-up-container.outputs.stdout == ''
+        run: >
+          docker compose --profile start-up --profile log 
+          --profile trace --profile metric up -d
 
-      - name: Run Docker Compose for Log (Loki, Minio, Grafana)
+      - name: Restart containers for Log (Loki, Minio)
         run: |
-          docker compose --profile log up -d
+          docker compose --profile log restart
 
-      - name: Run Docker Compose Of Trace (Agent, Tempo, Grafana)
+      - name: Restart containers Of Trace (Tempo, Minio)
         run: |
-          docker compose --profile trace up -d 
+          docker compose --profile trace restart
 
-      - name: Run Docker Compose for Metric (Agent, Prometheus, Grafana)
+      - name: Restart containers for Metric (Prometheus)
         run: |
-          docker compose --profile metric up -d 
+          docker compose --profile metric restart
 
       - name: Set Caddyfile Environment Variables
         run: |

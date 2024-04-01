@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   caddy:
-    profiles: ["caddy"]
+    profiles: ["start-up"]
     image: caddy:2.7.6-alpine
     container_name: caddy
     restart: always
@@ -12,7 +12,7 @@ services:
     network_mode: host
 
   minio:
-    profiles: ["log", "trace"]
+    profiles: ["start-up"] 
     container_name: minio
     image: minio/minio:latest
     volumes:
@@ -27,7 +27,7 @@ services:
     shm_size: "1gb"
 
   createbuckets:
-    profiles: ["log", "trace"]
+    profiles: ["start-up", "log", "trace"]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
@@ -59,6 +59,10 @@ services:
     volumes:
       - "$PWD/config/loki/loki-config-test.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
+    depends_on:
+      - minio
+    restart: always
+
 
   loki-stage:
     profiles: ["log"]
@@ -72,6 +76,9 @@ services:
     volumes:
       - "$PWD/config/loki/loki-config-stage.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
+    depends_on:
+      - minio
+    restart: always
 
   loki-aws:
     profiles: ["log"]
@@ -85,6 +92,9 @@ services:
     volumes:
       - "$PWD/config/loki/loki-config-aws.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
+    depends_on:
+      - minio
+    restart: always
 
   prometheus:
     profiles: ["metric"]
@@ -99,6 +109,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus-config.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.enable-remote-write-receiver'
+    restart: always
     
   tempo:
     profiles: ["trace"]
@@ -118,9 +129,10 @@ services:
       - "-config.expand-env=true" 
     depends_on:
       - minio
+    restart: always
 
   grafana:
-    profiles: ["log", "metric", "trace"]
+    profiles: ["start-up"]
     image: grafana/grafana:latest
     env_file:
       - .env
