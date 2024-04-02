@@ -29,6 +29,8 @@ ingester:
   chunk_target_size: 1048576 # Target size of 1MB before flushing.
   chunk_retain_period: 30s # Retain chunks for 30 seconds in memory after flushing.
   max_transfer_retries: 0
+  wal:
+    flush_on_shutdown: true
 
 storage_config:
   aws:
