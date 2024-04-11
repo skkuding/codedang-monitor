@@ -16,6 +16,12 @@ common:
     kvstore:
       store: inmemory
 
+query_scheduler: 
+  max_outstanding_requests_per_tenant: 4096
+
+frontend:
+  max_outstanding_per_tenant: 4096
+
 query_range:
   results_cache:
     cache:

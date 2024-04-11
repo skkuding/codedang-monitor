@@ -11,11 +11,6 @@ grafana.codedang.com {
 		reverse_proxy 127.0.0.1:3100
 	}
 
-	handle /lokitest/* {
-		uri strip_prefix /lokitest
-		reverse_proxy 127.0.0.1:3199
-	}
-
 	# handle /agent* {
 	# 	handle /agent/metric* {
 	# 		uri strip_prefix /agent/metric
