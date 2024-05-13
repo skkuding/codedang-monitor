@@ -1,0 +1,59 @@
+groups:
+  - name: cpu_alerts_per_container
+    rules:
+    - alert: HighCpuUsageClientAPIWarning
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 5
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High CPU usage detected on {{ $labels.instance }} of Client API"
+        description: 'CPU usage is above 80% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        value: '{{ $value | printf "%.2f" }}'
+
+    - alert: HighCpuUsageClientAPICritical
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 90
+      for: 1m
+      labels:
+        severity: 'critical'
+      annotations:
+        summary: "High CPU usage detected on {{ $labels.instance }} of Client API"
+        description: 'CPU usage is above 90% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        value: '{{ $value | printf "%.2f" }}'
+
+
+    - alert: HighCpuUsageAdminAPIWarning
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 80
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High CPU usage detected on {{ $labels.instance }} of Admin API"
+        description: 'CPU usage is above 80% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        value: '{{ $value | printf "%.2f" }}'
+
+    - alert: HighCpuUsageAdminAPICritical
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 90
+      for: 1m
+      labels:
+        severity: 'critical'
+      annotations:
+        summary: "High CPU usage detected on {{ $labels.instance }} of Admin API"
+        description: 'CPU usage is above 90% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        value: '{{ $value | printf "%.2f" }}'
+
+  # - name: cpu_alerts per instance 
+  #   rules:
+  #   - alert: HighCpuUsage
+  #     expr: sum by (instance) (rate(process_cpu_seconds_total{job="backend-client-metric"}[5m])) > 0.8
+  #     for: 1m
+  #     labels:
+  #       severity: warning
+  #     annotations:
+  #       summary: "High CPU usage detected on {{ $labels.instance }}"
+  #       description: "CPU usage is above 80% for 1 minute (currently {{ $value }}%)"
+
+  # - name: memory_alerts
+  #   rules:
+  #   - alert: HighMemoryUsage
+  #     expr: 
