@@ -1,0 +1,13 @@
+global:
+  resolve_timeout: 1m
+
+receivers:
+  - name: skkuding-msteams
+    webhook_configs:
+      - send_resolved: true
+        url: 'http://prometheus-msteams:2000/alertmanager'
+route:
+  group_interval: 5m
+  group_wait: 30s
+  repeat_interval: 30s
+  receiver: skkuding-msteams
