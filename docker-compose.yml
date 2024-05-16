@@ -117,6 +117,19 @@ services:
       - TEAMS_REQUEST_URI=alertmanager
     expose:
       - "2000"
+
+  check-instance:
+    profiles: ["metric"]
+    build: ./check-instance
+    environment:
+      - WEBHOOK_URL=${MS_WEBHOOK_URL}
+    container_name: check-instance
+    command: ["python", "check_instance.py"]
+    volumes:
+      - check_instance_data_volume:/app
+    depends_on:
+      - prometheus
+    restart: always
     
   tempo:
     profiles: ["trace"]
@@ -156,3 +169,4 @@ volumes:
   grafana_storage: {}
   minio_data_volume:
   prometheus_data_volume:
+  check_instance_data_volume:
