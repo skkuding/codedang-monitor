@@ -21,6 +21,8 @@ jobs:
           GF_SMTP_FROM_ADDRESS = ${{ secrets.FROM_ADDRESS }}
           MINIO_ROOT_USER = ${{ secrets.MINIO_ROOT_USER }}
           MINIO_ROOT_PASSWORD = ${{ secrets.MINIO_ROOT_PASSWORD }}
+          MS_WEBHOOK_URL = ${{ secrets.MS_WEBHOOK_URL }}
+
           EOF
 
       - name: Check if initial containers are running

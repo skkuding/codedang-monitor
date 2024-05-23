@@ -85,11 +85,50 @@ services:
       - "9090:9090"
     volumes:
       - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
+      - "$PWD/config/prometheus/rules:/etc/prometheus/rules"
       - prometheus_data_volume:/prometheus
     command: 
       - '--config.file=/etc/prometheus/prometheus-config.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.enable-remote-write-receiver'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: always
+
+  alertmanager:
+    profiles: ["metric"]
+    image: prom/alertmanager
+    container_name: alertmanager
+    volumes:
+      - "$PWD/config/alertmanager/config.yml:/etc/alertmanager/config.yml"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+      - "9093:9093"
+    restart: always
+
+  prometheus-msteams:
+    profiles: ["metric"]
+    image: docker.io/bzon/prometheus-msteams:v1.1.4
+    container_name: prometheus-msteams
+    restart: always
+    environment:
+      - TEAMS_INCOMING_WEBHOOK_URL=${MS_WEBHOOK_URL}
+      - TEAMS_REQUEST_URI=alertmanager
+    expose:
+      - "2000"
+
+  check-instance:
+    profiles: ["metric"]
+    build: ./check-instance
+    environment:
+      - WEBHOOK_URL=${MS_WEBHOOK_URL}
+    container_name: check-instance
+    command: ["python", "check_instance.py"]
+    volumes:
+      - check_instance_data_volume:/app
+    depends_on:
+      - prometheus
     restart: always
     
   tempo:
@@ -130,3 +169,4 @@ volumes:
   grafana_storage: {}
   minio_data_volume:
   prometheus_data_volume:
+  check_instance_data_volume:
