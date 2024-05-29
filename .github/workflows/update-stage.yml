@@ -36,23 +36,18 @@ jobs:
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
-      - name: when initial containers are not running, start all containers
+      - name: when initial containers are not running, start start-up containers
         if: steps.check-start-up-container.outputs.stdout == ''
         run: >
-          docker compose --profile start-up --profile log 
-          --profile trace --profile metric up -d
+          docker compose --profile start-up up -d
 
-      - name: Restart containers for Log (Loki, Minio)
+      - name: Start all containers except for start-up
         run: |
-          docker compose --profile log restart
+          docker compose --profile log --profile trace --profile metric up -d
 
-      - name: Restart containers Of Trace (Tempo, Minio)
+      - name: Restart all containers except for start-up
         run: |
-          docker compose --profile trace restart
-
-      - name: Restart containers for Metric (Prometheus)
-        run: |
-          docker compose --profile metric restart
+          docker compose --profile log --profile trace --profile metric restart
 
       - name: Set Caddyfile Environment Variables
         run: |
