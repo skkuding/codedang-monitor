@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   caddy:
-    profiles: ["start-up"]
+    profiles: ["caddy"]
     image: caddy:2.7.6-alpine
     container_name: caddy
     restart: always
@@ -12,7 +12,7 @@ services:
     network_mode: host
 
   minio:
-    profiles: ["start-up"] 
+    profiles: ["log", "trace"] 
     container_name: minio
     image: minio/minio:latest
     volumes:
@@ -27,7 +27,7 @@ services:
     shm_size: "1gb"
 
   createbuckets:
-    profiles: ["start-up", "log", "trace"]
+    profiles: ["log", "trace"]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
@@ -152,7 +152,7 @@ services:
     restart: always
 
   grafana:
-    profiles: ["start-up"]
+    profiles: ["log", "trace", "metric"]
     image: grafana/grafana:latest
     env_file:
       - .env
