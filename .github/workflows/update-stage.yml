@@ -27,25 +27,25 @@ jobs:
 
           EOF
 
-      - name: Check if initial containers are running
-        id: check-start-up-container
+      - name: Check if caddy container is running
+        id: check-caddy-container
         run: |
           {
             echo 'stdout<<EOF'
-            docker compose --profile start-up ps -q
+            docker compose --profile caddy ps -q
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
-      - name: when initial containers are not running, start start-up containers
-        if: steps.check-start-up-container.outputs.stdout == ''
+      - name: when caddy container is not running, start caddy container
+        if: steps.check-caddy-container.outputs.stdout == ''
         run: >
-          docker compose --profile start-up up -d
+          docker compose --profile caddy up -d
 
-      - name: Start all containers except for start-up
+      - name: Start all containers except for caddy
         run: |
           docker compose --profile log --profile trace --profile metric up -d
 
-      - name: Restart all containers except for start-up
+      - name: Restart all containers except for caddy
         run: |
           docker compose --profile log --profile trace --profile metric restart
 
