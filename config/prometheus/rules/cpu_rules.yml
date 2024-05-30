@@ -2,13 +2,13 @@ groups:
   - name: cpu_alerts_per_container
     rules:
     - alert: HighCpuUsageClientAPIWarning
-      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 0.01
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 0.8
       for: 1m
       labels:
         severity: warning
       annotations:
         summary: "High CPU usage detected on {{ $labels.instance }} of Client API"
-        description: 'CPU usage is above 80% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        description: 'CPU usage is above 80% for 1 minute (currently {{ $value | printf "%.2f" }})'
         value: '{{ $value | printf "%.2f" }}'
 
     - alert: HighCpuUsageClientAPICritical
@@ -18,7 +18,7 @@ groups:
         severity: 'critical'
       annotations:
         summary: "High CPU usage detected on {{ $labels.instance }} of Client API"
-        description: 'CPU usage is above 90% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        description: 'CPU usage is above 90% for 1 minute (currently {{ $value | printf "%.2f" }})'
         value: '{{ $value | printf "%.2f" }}'
 
 
@@ -29,7 +29,7 @@ groups:
         severity: warning
       annotations:
         summary: "High CPU usage detected on {{ $labels.instance }} of Admin API"
-        description: 'CPU usage is above 80% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        description: 'CPU usage is above 80% for 1 minute (currently {{ $value | printf "%.2f" }})'
         value: '{{ $value | printf "%.2f" }}'
 
     - alert: HighCpuUsageAdminAPICritical
@@ -39,7 +39,7 @@ groups:
         severity: 'critical'
       annotations:
         summary: "High CPU usage detected on {{ $labels.instance }} of Admin API"
-        description: 'CPU usage is above 90% for 1 minute (currently {{ $value | printf "%.2f" }}%)'
+        description: 'CPU usage is above 90% for 1 minute (currently {{ $value | printf "%.2f" }})'
         value: '{{ $value | printf "%.2f" }}'
 
   # - name: cpu_alerts per instance 
