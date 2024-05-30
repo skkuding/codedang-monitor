@@ -2,7 +2,7 @@ groups:
   - name: cpu_alerts_per_container
     rules:
     - alert: HighCpuUsageClientAPIWarning
-      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 5
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 0.01
       for: 1m
       labels:
         severity: warning
@@ -12,7 +12,7 @@ groups:
         value: '{{ $value | printf "%.2f" }}'
 
     - alert: HighCpuUsageClientAPICritical
-      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 90
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-client-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-client-metric"}[5m]))) > 0.9
       for: 1m
       labels:
         severity: 'critical'
@@ -23,7 +23,7 @@ groups:
 
 
     - alert: HighCpuUsageAdminAPIWarning
-      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 80
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 0.8
       for: 1m
       labels:
         severity: warning
@@ -33,7 +33,7 @@ groups:
         value: '{{ $value | printf "%.2f" }}'
 
     - alert: HighCpuUsageAdminAPICritical
-      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 90
+      expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 0.9
       for: 1m
       labels:
         severity: 'critical'
