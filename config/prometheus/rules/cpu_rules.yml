@@ -34,6 +34,7 @@ groups:
 
     - alert: HighCpuUsageAdminAPICritical
       expr: (sum by (instance) (avg_over_time(system_cpu_utilization{job="backend-admin-metric", system_cpu_state!="idle"}[5m])) + sum by (instance) (avg_over_time(process_cpu_utilization{job="backend-admin-metric"}[5m]))) > 0.9
+      for: 1m
       labels:
         severity: 'critical'
       annotations:
