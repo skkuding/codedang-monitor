@@ -1,0 +1,36 @@
+logging {
+    level = "info"
+    format = "logfmt"
+}
+
+otelcol.receiver.otlp "default" {
+    http {
+        endpoint = "0.0.0.0:4318"
+        metrics_url_path = "/v1/metrics"
+    }
+    
+    output {
+        metrics  = [otelcol.exporter.prometheus.metric.input]
+	traces   = [otelcol.exporter.otlphttp.trace.input]
+    }
+}
+
+otelcol.exporter.prometheus "metric" {
+    forward_to = [prometheus.remote_write.metric.receiver]
+}
+
+otelcol.exporter.otlphttp "trace" {
+    client {
+        endpoint = "https://grafana.codedang.com/tempo"
+        tls {
+            insecure             = true
+            insecure_skip_verify = true
+        }
+    }
+}
+
+prometheus.remote_write "metric" {
+    endpoint {
+        url = "https://grafana.codedang.com/prometheus/api/v1/write"
+    }
+}
