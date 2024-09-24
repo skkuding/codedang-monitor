@@ -1,6 +1,6 @@
 grafana.codedang.com {
 	handle /lokiaws/* {
-		@blocked not remote_ip {$AWS_REQ_IP}
+		@blocked not remote_ip 15.165.179.224
 		respond @blocked "Forbidden" 403
 
 		uri strip_prefix /lokiaws
@@ -12,7 +12,33 @@ grafana.codedang.com {
 		reverse_proxy 127.0.0.1:3199
 	}
 
+	handle /agent* {
+		handle /agent/metric* {
+			uri strip_prefix /agent/metric
+			reverse_proxy 127.0.0.1:4318/v1/metrics
+		}
+
+		handle {
+			uri strip_prefix /agent
+			reverse_proxy 127.0.0.1:12345
+		}
+	}
+
+	handle /prometheus/* {
+		uri strip_prefix /prometheus
+		reverse_proxy 127.0.0.1:9090
+	}
+
 	handle {
 		reverse_proxy 127.0.0.1:3000
 	}
+
+	log {
+        	output file /log/logfile.log
+        	format json
+	}
+}
+
+sentry.codedang.com {
+        reverse_proxy 127.0.0.1:9876
 }
