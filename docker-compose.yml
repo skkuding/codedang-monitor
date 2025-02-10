@@ -149,7 +149,7 @@ services:
       - "-config.expand-env=true" 
     depends_on:
       - minio
-    restart: always
+    restart: unless-stopped
 
   grafana:
     profiles: ["log", "trace", "metric"]
