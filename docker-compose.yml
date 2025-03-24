@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   caddy:
-    profiles: ["caddy"]
+    profiles: [ "caddy" ]
     image: caddy:2.7.6-alpine
     container_name: caddy
     restart: always
@@ -12,7 +12,7 @@ services:
     network_mode: host
 
   minio:
-    profiles: ["log", "trace"] 
+    profiles: [ "log", "trace" ]
     container_name: minio
     image: minio/minio:latest
     volumes:
@@ -27,26 +27,17 @@ services:
     shm_size: "1gb"
 
   createbuckets:
-    profiles: ["log", "trace"]
+    profiles: [ "log", "trace" ]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
     depends_on:
       - minio
     entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-      /usr/bin/mc mb data/loki-aws;
-      /usr/bin/mc mb data/loki-stage;
-      /usr/bin/mc mb data/tempo;
-      /usr/bin/mc anonymous set public data/tempo;
-      /usr/bin/mc anonymous set public data/loki-aws;
-      /usr/bin/mc anonymous set public data/loki-stage;
-      exit 0;
-      "
+      /bin/sh -c " /usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; /usr/bin/mc mb data/loki-aws; /usr/bin/mc mb data/loki-stage; /usr/bin/mc mb data/tempo; /usr/bin/mc anonymous set public data/tempo; /usr/bin/mc anonymous set public data/loki-aws; /usr/bin/mc anonymous set public data/loki-stage; exit 0; "
 
   loki-stage:
-    profiles: ["log"]
+    profiles: [ "log" ]
     image: grafana/loki:latest
     container_name: loki-stage
     environment:
@@ -62,7 +53,7 @@ services:
     restart: always
 
   loki-aws:
-    profiles: ["log"]
+    profiles: [ "log" ]
     image: grafana/loki:latest
     container_name: loki-aws
     environment:
@@ -78,7 +69,7 @@ services:
     restart: always
 
   prometheus:
-    profiles: ["metric"]
+    profiles: [ "metric" ]
     image: prom/prometheus:latest
     container_name: prometheus
     ports:
@@ -87,7 +78,7 @@ services:
       - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
       - "$PWD/config/prometheus/rules:/etc/prometheus/rules"
       - prometheus_data_volume:/prometheus
-    command: 
+    command:
       - '--config.file=/etc/prometheus/prometheus-config.yml'
       - '--storage.tsdb.path=/prometheus'
       - '--web.enable-remote-write-receiver'
@@ -96,7 +87,7 @@ services:
     restart: always
 
   alertmanager:
-    profiles: ["metric"]
+    profiles: [ "metric" ]
     image: prom/alertmanager
     container_name: alertmanager
     volumes:
@@ -108,7 +99,7 @@ services:
     restart: always
 
   prometheus-msteams:
-    profiles: ["metric"]
+    profiles: [ "metric" ]
     image: docker.io/bzon/prometheus-msteams:v1.1.4
     container_name: prometheus-msteams
     restart: always
@@ -119,46 +110,44 @@ services:
       - "2000"
 
   check-instance:
-    profiles: ["metric"]
+    profiles: [ "metric" ]
     build: ./check-instance
     environment:
       - WEBHOOK_URL=${MS_WEBHOOK_URL}
     container_name: check-instance
-    command: ["python", "check_instance.py"]
     volumes:
       - check_instance_data_volume:/app
     depends_on:
       - prometheus
     restart: always
-    
+
   tempo:
-    profiles: ["trace"]
+    profiles: [ "trace" ]
     image: grafana/tempo:latest
     container_name: tempo
     environment:
       - MINIO_ROOT_PASSWORD
       - MINIO_ROOT_USER
     ports:
-      - "3200:3200"   # tempo
-      - "4317:4317"   # otlp grpc
-      - "4318:4318"   # otlp http
+      - "3200:3200" # tempo
+      - "4317:4317" # otlp grpc
+      - "4318:4318" # otlp http
     volumes:
       - $PWD/config/tempo/tempo.yml:/etc/tempo.yml
-    command: 
+    command:
       - "-config.file=/etc/tempo.yml"
-      - "-config.expand-env=true" 
+      - "-config.expand-env=true"
     depends_on:
       - minio
     restart: unless-stopped
 
   grafana:
-    profiles: ["log", "trace", "metric"]
+    profiles: [ "log", "trace", "metric" ]
     image: grafana/grafana:latest
     env_file:
       - .env
     container_name: grafana
-    restart:
-      unless-stopped
+    restart: unless-stopped
     ports:
       - "3000:3000"
     volumes:
