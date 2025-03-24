@@ -45,7 +45,7 @@ services:
     ports:
       - "3101:3100"
     volumes:
-      - "$PWD/config/loki/loki-config.yml:/etc/loki/loki-config.yml"
+      - "./config/loki/loki-config.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     depends_on:
       - minio
@@ -62,7 +62,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - "$PWD/config/loki/loki-config.yml:/etc/loki/loki-config.yml"
+      - "./config/loki/loki-config.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     depends_on:
       - minio
@@ -75,8 +75,8 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
-      - "$PWD/config/prometheus/rules:/etc/prometheus/rules"
+      - "./config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
+      - "./config/prometheus/rules:/etc/prometheus/rules"
       - prometheus_data_volume:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus-config.yml'
@@ -91,7 +91,7 @@ services:
     image: prom/alertmanager
     container_name: alertmanager
     volumes:
-      - "$PWD/config/alertmanager/config.yml:/etc/alertmanager/config.yml"
+      - "./config/alertmanager/config.yml:/etc/alertmanager/config.yml"
     command:
       - '--config.file=/etc/alertmanager/config.yml'
     ports:
@@ -133,7 +133,7 @@ services:
       - "4317:4317" # otlp grpc
       - "4318:4318" # otlp http
     volumes:
-      - $PWD/config/tempo/tempo.yml:/etc/tempo.yml
+      - ./config/tempo/tempo.yml:/etc/tempo.yml
     command:
       - "-config.file=/etc/tempo.yml"
       - "-config.expand-env=true"
@@ -152,7 +152,8 @@ services:
       - "3000:3000"
     volumes:
       - "grafana_storage:/var/lib/grafana"
-      - "$PWD/config/grafana/grafana.ini:/etc/grafana/grafana.ini"
+      - "./config/grafana/grafana.ini:/etc/grafana/grafana.ini"
+      - "./config/grafana/provisioning:/etc/grafana/provisioning"
 
 volumes:
   grafana_storage: {}

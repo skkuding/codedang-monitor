@@ -1,0 +1,26 @@
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: true
+    version: 1
+    editable: false
+
+  - name: Loki
+    type: loki
+    url: http://loki-aws:3100
+    access: proxy
+    isDefault: false
+    version: 1
+    editable: false
+
+  - name: Tempo
+    type: tempo
+    url: http://tempo:3200
+    access: proxy
+    isDefault: false
+    version: 1
+    editable: false
