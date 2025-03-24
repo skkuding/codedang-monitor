@@ -1,8 +1,8 @@
-grafana.codedang.com {
+{$GRAFANA_DOMAIN:localhost:3000} {
 	log {
 		format console
 	}
-	
+
 	handle /lokiaws/* {
 		@blocked not remote_ip {$AWS_REQ_IP}
 		respond @blocked "Forbidden" 403
@@ -38,6 +38,6 @@ grafana.codedang.com {
 	}
 }
 
-sentry.codedang.com {
-        reverse_proxy 127.0.0.1:9876
+{$SENTRY_DOMAIN} {
+	reverse_proxy 127.0.0.1:9876
 }

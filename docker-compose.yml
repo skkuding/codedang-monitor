@@ -41,10 +41,11 @@ services:
     environment:
       - MINIO_ROOT_PASSWORD
       - MINIO_ROOT_USER
+      - MINIO_BUCKET_NAME=loki-stage
     ports:
       - "3101:3100"
     volumes:
-      - "$PWD/config/loki/loki-config-stage.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     depends_on:
       - minio
@@ -57,10 +58,11 @@ services:
     environment:
       - MINIO_ROOT_PASSWORD
       - MINIO_ROOT_USER
+      - MINIO_BUCKET_NAME=loki-aws
     ports:
       - "3100:3100"
     volumes:
-      - "$PWD/config/loki/loki-config-aws.yml:/etc/loki/loki-config.yml"
+      - "$PWD/config/loki/loki-config.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     depends_on:
       - minio
