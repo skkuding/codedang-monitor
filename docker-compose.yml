@@ -18,9 +18,9 @@ services:
       - MINIO_ROOT_USER
       - MINIO_ROOT_PASSWORD
     ports:
-      - "${MINIO_PORT:-9000}:9000"
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"
-    command: server data --address ':${MINIO_PORT:-9000}' --console-address ':${MINIO_CONSOLE_PORT:-9001}'
+      - "9000:9000"
+      - "9001:9001"
+    command: server data --address ':9000' --console-address ':9001'
     shm_size: "1gb"
 
   createbuckets:
@@ -31,7 +31,7 @@ services:
     depends_on:
       - minio
     entrypoint: >
-      /bin/sh -c " /usr/bin/mc config host add minio http://minio:${MINIO_PORT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; /usr/bin/mc mb data/loki-aws; /usr/bin/mc mb data/loki-stage; /usr/bin/mc mb data/tempo; /usr/bin/mc anonymous set public data/tempo; /usr/bin/mc anonymous set public data/loki-aws; /usr/bin/mc anonymous set public data/loki-stage; exit 0; "
+      /bin/sh -c " /usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; /usr/bin/mc mb data/loki-aws; /usr/bin/mc mb data/loki-stage; /usr/bin/mc mb data/tempo; /usr/bin/mc anonymous set public data/tempo; /usr/bin/mc anonymous set public data/loki-aws; /usr/bin/mc anonymous set public data/loki-stage; exit 0; "
 
   loki-stage:
     profiles: [ "log" ]
@@ -42,7 +42,7 @@ services:
       - MINIO_ROOT_USER
       - MINIO_BUCKET_NAME=loki-stage
     ports:
-      - "${LOKI_STAGE_PORT:-3100}:3100"
+      - "3101:3100"
     volumes:
       - "./config/loki/loki-config.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
@@ -59,7 +59,7 @@ services:
       - MINIO_ROOT_USER
       - MINIO_BUCKET_NAME=loki-aws
     ports:
-      - "${LOKI_AWS_PORT:-3100}:3100"
+      - "3100:3100"
     volumes:
       - "./config/loki/loki-config.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
@@ -127,7 +127,6 @@ services:
     environment:
       - MINIO_ROOT_PASSWORD
       - MINIO_ROOT_USER
-      - MINIO_PORT
     ports:
       - "3200:3200" # tempo
       - "4317:4317" # otlp grpc
