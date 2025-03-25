@@ -1,4 +1,4 @@
-{$GRAFANA_DOMAIN:localhost:3000} {
+grafana.codedang.com {
 	log {
 		format console
 	}
@@ -38,6 +38,6 @@
 	}
 }
 
-{$SENTRY_DOMAIN} {
+sentry.codedang.com {
 	reverse_proxy 127.0.0.1:9876
 }

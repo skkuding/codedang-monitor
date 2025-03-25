@@ -9,7 +9,15 @@ datasources:
     version: 1
     editable: false
 
-  - name: Loki
+  - name: Loki-stage
+    type: loki
+    url: http://loki-stage:3100
+    access: proxy
+    isDefault: false
+    version: 1
+    editable: false
+
+  - name: Loki-aws
     type: loki
     url: http://loki-aws:3100
     access: proxy
