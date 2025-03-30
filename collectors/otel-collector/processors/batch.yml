@@ -1,0 +1,2 @@
+timeout: 10s
+send_batch_size: 512

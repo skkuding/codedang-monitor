@@ -1,0 +1,3 @@
+protocols:
+  grpc:
+    endpoint: otel-collector:4317

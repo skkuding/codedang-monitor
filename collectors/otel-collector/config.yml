@@ -1,0 +1,64 @@
+# 아키텍처 설명
+# https://opentelemetry.io/docs/collector/architecture/
+
+# 1. Receiver
+# https://opentelemetry.io/docs/collector/configuration/#receivers
+receivers:
+  otlp: ${file:receivers/otlp.yml}
+
+# 2. Processor
+# https://opentelemetry.io/docs/collector/configuration/#processors
+processors:
+  batch: ${file:processors/batch.yml}
+
+# 3. Exporter
+# https://opentelemetry.io/docs/collector/configuration/#exporters
+exporters:
+  loki: ${file:exporters/loki.yml}
+  prometheus: ${file:exporters/prometheus.yml}
+  tempo: ${file:exporters/tempo.yml}
+
+# 4. Service
+# https://opentelemetry.io/docs/collector/configuration/#service
+service:
+  pipelines:
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [loki]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [tempo]
+
+  # Collector 자체 모니터링을 위한 설정
+  # https://opentelemetry.io/docs/collector/internal-telemetry
+  telemetry:
+    metrics:
+      level: basic
+      readers:
+        - periodic:
+            exporter:
+              prometheus:
+                host: prometheus
+                port: 9090
+    logs:
+      processors:
+        - batch:
+            exporters: [loki]
+    traces:
+      processors:
+        - batch:
+            exporter:
+              otlp:
+                protocol: http/protobuf
+                endpoint: https://backend:4318
+
+# 5. Extensions
+# https://opentelemetry.io/docs/collector/configuration/#extensions
+extensions:
+  health_check:

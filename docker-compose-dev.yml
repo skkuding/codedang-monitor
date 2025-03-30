@@ -86,7 +86,7 @@ services:
       - "2000"
 
   check-instance:
-    build: ./check-instance
+    build: ./etc/check-instance
     environment:
       - WEBHOOK_URL=${MS_WEBHOOK_URL}
     container_name: check-instance
@@ -104,12 +104,27 @@ services:
       - MINIO_ROOT_USER
     ports:
       - "3200:3200" # tempo console
-      - "4317:4317" # otlp grpc
+      - "3201:4317" # otlp grpc
     volumes:
       - ./backends/tempo:/etc
     command:
       - "-config.file=/etc/tempo.yml"
       - "-config.expand-env=true"
+    depends_on:
+      - minio
+    restart: unless-stopped
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    environment:
+      - MINIO_ROOT_PASSWORD
+      - MINIO_ROOT_USER
+    ports:
+      - "4317:4317" # otlp grpc
+      - "13133:13133" # health_check extension
+    volumes:
+      - ./collectors/otel-collector:/etc/otel-collector
     depends_on:
       - minio
     restart: unless-stopped

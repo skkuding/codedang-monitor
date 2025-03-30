@@ -1,0 +1,3 @@
+endpoint: "tempo:3201"
+tls:
+  insecure: true

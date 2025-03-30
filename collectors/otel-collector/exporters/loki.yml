@@ -1,0 +1,3 @@
+endpoint: "loki:3100"
+tls:
+  insecure: true
