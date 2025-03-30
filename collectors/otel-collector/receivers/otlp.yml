@@ -1,3 +1,9 @@
 protocols:
   grpc:
     endpoint: 0.0.0.0:4317
+    tls_settings:
+      insecure: true
+  http:
+    endpoint: 0.0.0.0:4318
+    tls_settings:
+      insecure: true
