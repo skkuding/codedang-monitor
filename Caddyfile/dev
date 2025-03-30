@@ -24,6 +24,11 @@ http://localhost:80 {
 		reverse_proxy tempo:3200
 	}
 
+	handle /otel-collector-health {
+		uri strip_prefix /otel-collector-health
+		reverse_proxy otel-collector:13133
+	}
+
 	handle {
 		reverse_proxy grafana:3000
 	}
