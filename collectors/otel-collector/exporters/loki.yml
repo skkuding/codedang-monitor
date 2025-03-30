@@ -1,3 +1,0 @@
-endpoint: "loki:9095"
-tls:
-  insecure: true

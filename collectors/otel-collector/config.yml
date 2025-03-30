@@ -4,19 +4,35 @@
 # 1. Receiver
 # https://opentelemetry.io/docs/collector/configuration/#receivers
 receivers:
-  otlp: ${file:receivers/otlp.yml}
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
 
 # 2. Processor
 # https://opentelemetry.io/docs/collector/configuration/#processors
 processors:
-  batch: ${file:processors/batch.yml}
+  batch:
+    timeout: 10s
+    send_batch_size: 512
 
 # 3. Exporter
 # https://opentelemetry.io/docs/collector/configuration/#exporters
 exporters:
-  loki: ${file:exporters/loki.yml}
-  prometheus: ${file:exporters/prometheus.yml}
-  tempo: ${file:exporters/tempo.yml}
+  otlphttp/logs:
+    endpoint: "http://loki:9095/otlp"
+    tls:
+      insecure: true
+
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+
+  otlphttp/traces:
+    endpoint: "http://tempo:9095/otlp"
+    tls:
+      insecure: true
 
 # 4. Service
 # https://opentelemetry.io/docs/collector/configuration/#service
@@ -25,7 +41,7 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [loki]
+      exporters: [otlphttp/logs]
     metrics:
       receivers: [otlp]
       processors: [batch]
@@ -33,30 +49,31 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [tempo]
+      exporters: [otlphttp/traces]
 
   # Collector 자체 모니터링을 위한 설정
   # https://opentelemetry.io/docs/collector/internal-telemetry
-  telemetry:
-    metrics:
-      level: basic
-      readers:
-        - periodic:
-            exporter:
-              prometheus:
-                host: prometheus
-                port: 9090
-    logs:
-      processors:
-        - batch:
-            exporters: [loki]
-    traces:
-      processors:
-        - batch:
-            exporter:
-              otlp:
-                protocol: http/protobuf
-                endpoint: https://backend:4318
+  # telemetry:
+  #   metrics:
+  #     level: basic
+  #     readers:
+  #       - periodic:
+  #           exporter:
+  #             prometheus:
+  #               host: prometheus
+  #               port: 9090
+  #   logs:
+  #     level: debug
+  #     processors:
+  #       - batch:
+  #           exporters: [loki]
+  #   traces:
+  #     processors:
+  #       - batch:
+  #           exporter:
+  #             otlp:
+  #               protocol: http/protobuf
+  #               endpoint: https://backend:4318
 
 # 5. Extensions
 # https://opentelemetry.io/docs/collector/configuration/#extensions

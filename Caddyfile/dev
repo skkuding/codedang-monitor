@@ -3,23 +3,20 @@ http://localhost:80 {
 		format console
 		level info
 	}
-
 	handle /minio-console/* {
-		uri strip_prefix /minio-console
 		reverse_proxy minio:9001
 	}
 
-	handle /prometheus-console/* {
-		uri strip_prefix /prometheus-console
+	handle /prometheus-console* {
 		reverse_proxy prometheus:9090 # includes console
 	}
 
-	handle /alertmanager-console/* {
+	handle /alertmanager-console* {
 		uri strip_prefix /alertmanager-console
 		reverse_proxy alertmanager:9093 # includes console
 	}
 
-	handle /tempo-console/* {
+	handle /tempo-console* {
 		uri strip_prefix /tempo-console
 		reverse_proxy tempo:3200
 	}

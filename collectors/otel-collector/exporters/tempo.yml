@@ -1,3 +1,0 @@
-endpoint: "tempo:9095"
-tls:
-  insecure: true
