@@ -15,7 +15,6 @@ distributor:
   receivers: # this configuration will listen on all ports and protocols that tempo is capable of.
     otlp:
       protocols:
-        http:
         grpc:
 
 ingester:
@@ -25,8 +24,6 @@ ingester:
 compactor:
   compaction:
     block_retention: 336h # Duration to keep blocks. Default is 14 days
-
-# metrics_generator:
 
 storage:
   trace:

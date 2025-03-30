@@ -1,8 +1,9 @@
 auth_enabled: false
 
 server:
-  http_listen_port: 3100
-  grpc_listen_port: 9096
+  # use only gRPC for tempo
+  http_listen_port: 0
+  grpc_listen_port: 9096 # TODO: change to loki default grpc port 9095
 
 common:
   instance_addr: 127.0.0.1

@@ -1,0 +1,40 @@
+localhost {
+	log {
+		format console
+	}
+
+	handle /minio-console/* {
+		uri strip_prefix /minio-console
+		reverse_proxy 127.0.0.1:9001
+	}
+
+	handle /loki/* {
+		uri strip_prefix /loki
+		reverse_proxy 127.0.0.1:3100
+	}
+
+	handle /prometheus/* {
+		uri strip_prefix /prometheus
+		reverse_proxy 127.0.0.1:9090 # includes console
+	}
+
+	handle /tempo-console/* {
+		uri strip_prefix /tempo-console
+		reverse_proxy 127.0.0.1:3200
+	}
+	handle /tempo/* {
+		uri strip_prefix /tempo
+		reverse_proxy 127.0.0.1:4317 # gRPC
+	}
+
+	handle /alloy-console/* {
+		uri strip_prefix /alloy-console
+		reverse_proxy 127.0.0.1:12345
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+}
+
+# TODO: Add reverse proxy for dev sentry

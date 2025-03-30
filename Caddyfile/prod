@@ -3,6 +3,11 @@ grafana.codedang.com {
 		format console
 	}
 
+	handle /minio-console/* {
+		uri strip_prefix /minio-console
+		reverse_proxy 127.0.0.1:9001
+	}
+
 	handle /lokiaws/* {
 		@blocked not remote_ip {$AWS_REQ_IP}
 		respond @blocked "Forbidden" 403
@@ -11,26 +16,18 @@ grafana.codedang.com {
 		reverse_proxy 127.0.0.1:3100
 	}
 
-	# handle /agent* {
-	# 	handle /agent/metric* {
-	# 		uri strip_prefix /agent/metric
-	# 		reverse_proxy 127.0.0.1:4318
-	# 	}
-
-	# 	handle {
-	# 		uri strip_prefix /agent
-	# 		reverse_proxy 127.0.0.1:12345
-	# 	}
-	# }
-
 	handle /prometheus/* {
 		uri strip_prefix /prometheus
-		reverse_proxy 127.0.0.1:9090
+		reverse_proxy 127.0.0.1:9090 # includes console
 	}
 
+	handle /tempo-console/* {
+		uri strip_prefix /tempo-console
+		reverse_proxy 127.0.0.1:3200
+	}
 	handle /tempo/* {
 		uri strip_prefix /tempo
-		reverse_proxy 127.0.0.1:4318
+		reverse_proxy 127.0.0.1:4318 # http
 	}
 
 	handle {
