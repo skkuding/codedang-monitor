@@ -1,1 +1,4 @@
 .env*
+/backends/tempo/hostname
+/backends/tempo/hosts
+/backends/tempo/resolv.conf

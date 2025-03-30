@@ -1,39 +1,31 @@
-localhost {
+http://localhost:80 {
 	log {
 		format console
+		level info
 	}
 
 	handle /minio-console/* {
 		uri strip_prefix /minio-console
-		reverse_proxy 127.0.0.1:9001
+		reverse_proxy minio:9001
 	}
 
-	handle /loki/* {
-		uri strip_prefix /loki
-		reverse_proxy 127.0.0.1:3100
+	handle /prometheus-console/* {
+		uri strip_prefix /prometheus-console
+		reverse_proxy prometheus:9090 # includes console
 	}
 
-	handle /prometheus/* {
-		uri strip_prefix /prometheus
-		reverse_proxy 127.0.0.1:9090 # includes console
+	handle /alertmanager-console/* {
+		uri strip_prefix /alertmanager-console
+		reverse_proxy alertmanager:9093 # includes console
 	}
 
 	handle /tempo-console/* {
 		uri strip_prefix /tempo-console
-		reverse_proxy 127.0.0.1:3200
-	}
-	handle /tempo/* {
-		uri strip_prefix /tempo
-		reverse_proxy 127.0.0.1:4317 # gRPC
-	}
-
-	handle /alloy-console/* {
-		uri strip_prefix /alloy-console
-		reverse_proxy 127.0.0.1:12345
+		reverse_proxy tempo:3200
 	}
 
 	handle {
-		reverse_proxy 127.0.0.1:3000
+		reverse_proxy grafana:3000
 	}
 }
 

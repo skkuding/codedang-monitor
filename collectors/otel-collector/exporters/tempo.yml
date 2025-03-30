@@ -1,3 +1,3 @@
-endpoint: "tempo:3201"
+endpoint: "tempo:9095"
 tls:
   insecure: true

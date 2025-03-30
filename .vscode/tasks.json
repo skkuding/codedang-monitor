@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker Compose Rebuild",
+      "type": "shell",
+      "command": "docker compose -f docker-compose-dev.yml down -v && docker compose -f docker-compose-dev.yml up --force-recreate --build -d",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

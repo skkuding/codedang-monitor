@@ -5,13 +5,13 @@ datasources:
     type: prometheus
     url: http://prometheus:9090
     access: proxy
-    isDefault: true
+    isDefault: false
     version: 1
     editable: false
 
   - name: Loki
     type: loki
-    url: http://loki:3100
+    url: http://loki:80
     access: proxy
     isDefault: false
     version: 1
@@ -19,7 +19,7 @@ datasources:
 
   - name: Tempo
     type: tempo
-    url: http://tempo:3200
+    url: http://tempo:80
     access: proxy
     isDefault: false
     version: 1

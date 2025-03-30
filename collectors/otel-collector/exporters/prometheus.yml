@@ -1,1 +1,3 @@
 endpoint: "prometheus:9090"
+tls:
+  insecure: true
