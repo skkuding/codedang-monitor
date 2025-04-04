@@ -22,7 +22,7 @@ processors:
 # https://opentelemetry.io/docs/collector/configuration/#exporters
 exporters:
   otlphttp/logs:
-    endpoint: "http://loki:9095/otlp"
+    endpoint: "http://loki:80/otlp"
     tls:
       insecure: true
 
@@ -30,7 +30,7 @@ exporters:
     endpoint: "0.0.0.0:8889"
 
   otlphttp/traces:
-    endpoint: "http://tempo:9095/otlp"
+    endpoint: "http://tempo:80/otlp"
     tls:
       insecure: true
 
@@ -40,33 +40,37 @@ service:
   pipelines:
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: []
       exporters: [otlphttp/logs]
     metrics:
       receivers: [otlp]
-      processors: [batch]
+      processors: []
       exporters: [prometheus]
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: []
       exporters: [otlphttp/traces]
 
   # Collector 자체 모니터링을 위한 설정
   # https://opentelemetry.io/docs/collector/internal-telemetry
-  # telemetry:
-  #   metrics:
-  #     level: basic
-  #     readers:
-  #       - periodic:
-  #           exporter:
-  #             prometheus:
-  #               host: prometheus
-  #               port: 9090
-  #   logs:
-  #     level: debug
-  #     processors:
-  #       - batch:
-  #           exporters: [loki]
+  telemetry:
+    #   metrics:
+    #     level: basic
+    #     readers:
+    #       - periodic:
+    #           exporter:
+    #             prometheus:
+    #               host: prometheus
+    #               port: 9090
+    # logs:
+    #   level: DEBUG
+    #   development: true
+    #   processors:
+    #     - batch:
+    #         exporter:
+    #           otlp:
+    #             protocol: http/protobuf
+    #             endpoint: http://loki:80/otlp
   #   traces:
   #     processors:
   #       - batch:

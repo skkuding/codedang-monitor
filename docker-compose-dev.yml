@@ -2,6 +2,8 @@ services:
   caddy:
     image: caddy:alpine
     restart: always
+    env_file:
+      - .env
     ports:
       - "${ROOT_HTTP_PORT:-80}:80"
       - "${ROOT_HTTPS_PORT:-443}:443"
@@ -41,8 +43,8 @@ services:
       - MINIO_ROOT_USER
       - MINIO_BUCKET_NAME=loki
     expose:
-      - "80" # -> Grafana
-      - "9095" # <- Otel-Collector
+      - "80" # <- HTTP
+      - "9095" # <- GRPC
     volumes:
       - "./backends/loki:/etc/loki"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
@@ -105,9 +107,9 @@ services:
       - MINIO_ROOT_USER
       - MINIO_BUCKET_NAME=tempo
     expose:
-      - "80" # -> Grafana
+      - "80" # <- HTTP
       - "3200" # <- Console
-      - "9095" # <- Otel-Collector
+      - "9095" # <- GRPC
     volumes:
       - ./backends/tempo:/etc
     command:
@@ -153,16 +155,17 @@ services:
       - "./grafana:/etc/grafana"
       - "grafana_storage:/var/lib/grafana"
 
-  telemetrygen:
-    image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:latest
-    container_name: telemetrygen
-    command:
-      - logs
-      - --otlp-endpoint=otel-collector:4318
-      - --otlp-insecure
-    restart: "no"
-    depends_on:
-      - otel-collector
+  k6:
+    image: grafana/k6:latest
+    container_name: k6
+    # restart: unless-stopped
+    environment:
+      - K6_OTEL_GRPC_EXPORTER_INSECURE=true
+      - K6_OTEL_GRPC_EXPORTER_ENDPOINT=otel-collector:4317
+      - K6_OTEL_EXPORTER_TYPE=grpc
+    volumes:
+      - ./k6:/scripts
+    command: run --out experimental-opentelemetry --http-debug=true /scripts/test.js
 
 volumes:
   grafana_storage: {}
