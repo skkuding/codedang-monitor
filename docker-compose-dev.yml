@@ -43,8 +43,7 @@ services:
       - MINIO_ROOT_USER
       - MINIO_BUCKET_NAME=loki
     expose:
-      - "80" # <- HTTP
-      - "9095" # <- GRPC
+      - "3100"
     volumes:
       - "./backends/loki:/etc/loki"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
