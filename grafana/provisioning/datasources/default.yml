@@ -3,6 +3,7 @@ apiVersion: 1
 datasources:
   - name: Prometheus
     type: prometheus
+    uid: prometheus
     url: http://prometheus:9090
     access: proxy
     isDefault: false
@@ -11,6 +12,7 @@ datasources:
 
   - name: Loki
     type: loki
+    uid: loki
     url: http://loki:80
     access: proxy
     isDefault: false
@@ -19,8 +21,16 @@ datasources:
 
   - name: Tempo
     type: tempo
-    url: http://tempo:80
-    access: proxy
-    isDefault: false
+    url: http://tempo:3200
+    basicAuth: false
+    isDefault: true
     version: 1
     editable: false
+    apiVersion: 1
+    uid: tempo
+    jsonData:
+      httpMethod: GET
+      serviceMap:
+        datasourceUid: prometheus
+      streamingEnabled:
+        search: true

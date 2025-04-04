@@ -1,10 +1,8 @@
 stream_over_http_enabled: true
 
 server:
-  http_listen_address: "0.0.0.0"
-  http_listen_port: 80
-  grpc_listen_address: "0.0.0.0"
-  grpc_listen_port: 9095
+  http_listen_address: 0.0.0.0
+  http_listen_port: 3200
   log_level: info
 
 query_frontend:
@@ -15,10 +13,11 @@ query_frontend:
     duration_slo: 5s
 
 distributor:
-  receivers: # this configuration will listen on all ports and protocols that tempo is capable of.
+  receivers:
     otlp:
       protocols:
         grpc:
+          endpoint: "tempo:4317"
 
 ingester:
   max_block_duration: 5m # cut the headblock when this much time passes. this is being set for demo purposes and should probably be left alone normally

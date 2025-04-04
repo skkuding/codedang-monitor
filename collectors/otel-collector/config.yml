@@ -21,6 +21,9 @@ processors:
 # 3. Exporter
 # https://opentelemetry.io/docs/collector/configuration/#exporters
 exporters:
+  debug:
+    verbosity: detailed
+
   otlphttp/logs:
     endpoint: "http://loki:80/otlp"
     tls:
@@ -29,8 +32,8 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
 
-  otlphttp/traces:
-    endpoint: "http://tempo:80/otlp"
+  otlp:
+    endpoint: tempo:4317
     tls:
       insecure: true
 
@@ -49,7 +52,7 @@ service:
     traces:
       receivers: [otlp]
       processors: []
-      exporters: [otlphttp/traces]
+      exporters: [otlp]
 
   # Collector 자체 모니터링을 위한 설정
   # https://opentelemetry.io/docs/collector/internal-telemetry

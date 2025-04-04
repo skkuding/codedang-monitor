@@ -107,9 +107,8 @@ services:
       - MINIO_ROOT_USER
       - MINIO_BUCKET_NAME=tempo
     expose:
-      - "80" # <- HTTP
-      - "3200" # <- Console
-      - "9095" # <- GRPC
+      - "3200"
+      - "4317"
     volumes:
       - ./backends/tempo:/etc
     command:
