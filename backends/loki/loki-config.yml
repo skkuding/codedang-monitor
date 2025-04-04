@@ -1,8 +1,9 @@
 auth_enabled: false
 
 server:
-  http_listen_port: 80
-  grpc_listen_port: 9095
+  http_listen_port: 3100
+  grpc_listen_port: 0
+  log_level: info
 
 common:
   instance_addr: 127.0.0.1
@@ -49,15 +50,15 @@ storage_config:
 schema_config:
   configs:
     - from: 2020-10-24
-      store: boltdb-shipper
+      store: tsdb
       object_store: aws
-      schema: v11
+      schema: v13
       index:
         prefix: index_
         period: 24h
 
 limits_config:
-  allow_structured_metadata: false # boltDB shipper does not support structured logs
+  allow_structured_metadata: true
 
 ruler:
   alertmanager_url: http://alertmanager:9093

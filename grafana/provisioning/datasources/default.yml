@@ -13,7 +13,7 @@ datasources:
   - name: Loki
     type: loki
     uid: loki
-    url: http://loki:80
+    url: http://loki:3100
     access: proxy
     isDefault: false
     version: 1
@@ -21,13 +21,13 @@ datasources:
 
   - name: Tempo
     type: tempo
+    uid: tempo
     url: http://tempo:3200
     basicAuth: false
     isDefault: true
     version: 1
     editable: false
     apiVersion: 1
-    uid: tempo
     jsonData:
       httpMethod: GET
       serviceMap:
