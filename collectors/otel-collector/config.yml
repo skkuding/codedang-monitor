@@ -10,6 +10,8 @@ receivers:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
+  fluentforward:
+    endpoint: 0.0.0.0:8006
 
 # 2. Processor
 # https://opentelemetry.io/docs/collector/configuration/#processors
@@ -22,7 +24,7 @@ processors:
 # https://opentelemetry.io/docs/collector/configuration/#exporters
 exporters:
   debug:
-    verbosity: detailed
+    verbosity: normal
 
   otlphttp/logs:
     endpoint: http://loki:3100/otlp
