@@ -35,6 +35,14 @@ services:
     entrypoint: >
       /bin/sh -c \ "/usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; \ /usr/bin/mc mb data/loki; /usr/bin/mc mb data/tempo; /usr/bin/mc anonymous set public data/tempo; \ /usr/bin/mc anonymous set public data/loki; \ exit 0;"
 
+  fluent-bit:
+    image: fluent/fluent-bit:latest
+    container_name: fluent-bit
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./exporters/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+      - ./exporters/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf:ro
+
   loki:
     image: grafana/loki:latest
     container_name: loki
@@ -152,18 +160,17 @@ services:
     volumes:
       - "./grafana:/etc/grafana"
       - "grafana_storage:/var/lib/grafana"
-
-  k6:
-    image: grafana/k6:latest
-    container_name: k6
-    # restart: unless-stopped
-    environment:
-      - K6_OTEL_GRPC_EXPORTER_INSECURE=true
-      - K6_OTEL_GRPC_EXPORTER_ENDPOINT=otel-collector:4317
-      - K6_OTEL_EXPORTER_TYPE=grpc
-    volumes:
-      - ./k6:/scripts
-    command: run --out experimental-opentelemetry --http-debug=true /scripts/test.js
+  # k6:
+  #   image: grafana/k6:latest
+  #   container_name: k6
+  #   # restart: unless-stopped
+  #   environment:
+  #     - K6_OTEL_GRPC_EXPORTER_INSECURE=true
+  #     - K6_OTEL_GRPC_EXPORTER_ENDPOINT=otel-collector:4317
+  #     - K6_OTEL_EXPORTER_TYPE=grpc
+  #   volumes:
+  #     - ./k6:/scripts
+  #   command: run --out experimental-opentelemetry --http-debug=true /scripts/test.js
 
 volumes:
   grafana_storage: {}
