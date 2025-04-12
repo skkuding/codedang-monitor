@@ -24,7 +24,7 @@ processors:
 # https://opentelemetry.io/docs/collector/configuration/#exporters
 exporters:
   debug:
-    verbosity: normal
+    verbosity: detailed
 
   otlphttp/logs:
     endpoint: http://loki:3100/otlp
