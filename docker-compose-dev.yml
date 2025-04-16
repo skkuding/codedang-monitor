@@ -35,14 +35,6 @@ services:
     entrypoint: >
       /bin/sh -c \ "/usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; \ /usr/bin/mc mb data/loki; /usr/bin/mc mb data/tempo; /usr/bin/mc anonymous set public data/tempo; \ /usr/bin/mc anonymous set public data/loki; \ exit 0;"
 
-  fluent-bit:
-    image: fluent/fluent-bit:latest
-    container_name: fluent-bit
-    volumes:
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - ./exporters/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
-      - ./exporters/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf:ro
-
   loki:
     image: grafana/loki:latest
     container_name: loki
@@ -187,17 +179,18 @@ services:
       - "5672"
     volumes:
       - sample-app-mq-rabbitmq:/var/lib/rabbitmq
-  # sample-app-b:
-  #   profiles: [ "sample" ]
-  #   build:
-  #     context: ./test/sample-b
-  #   restart: unless-stopped
-  #   expose:
-  #     - "3000"
-  #   environment:
-  #     - RABBITMQ_URI=amqp://sample-app-mq:5672
-  #   depends_on:
-  #     - sample-app-mq
+
+  sample-app-b:
+    profiles: [ "sample" ]
+    build:
+      context: ./test/sample-b
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      - RABBITMQ_URI=amqp://sample-app-mq:5672
+    depends_on:
+      - sample-app-mq
   # k6:
   #   image: grafana/k6:latest
   #   container_name: k6
