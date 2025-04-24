@@ -10,8 +10,6 @@ receivers:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-  fluentforward:
-    endpoint: 0.0.0.0:8006
 
 # 2. Processor
 # https://opentelemetry.io/docs/collector/configuration/#processors
@@ -34,7 +32,7 @@ exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
 
-  otlp:
+  otlp/trace:
     endpoint: tempo:4317
     tls:
       insecure: true
@@ -54,7 +52,7 @@ service:
     traces:
       receivers: [otlp]
       processors: []
-      exporters: [otlp]
+      exporters: [otlp/trace]
 
   # Collector 자체 모니터링을 위한 설정
   # https://opentelemetry.io/docs/collector/internal-telemetry
