@@ -24,6 +24,7 @@ exporters:
   # debug:
   #   verbosity: detailed
 
+  # TODO: gRPC 프로토콜로 변경
   otlphttp/logs:
     endpoint: http://loki:3100/otlp
     tls:
