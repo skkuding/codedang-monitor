@@ -2,13 +2,13 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Docker Compose Rebuild",
+      "label": "docker:dev",
+      "detail": "Local 환경에서 모니터링 서버 실행",
       "type": "shell",
-      "command": "docker compose -f docker-compose-dev.yml down -v && docker compose -f docker-compose-dev.yml up --force-recreate --build -d",
+      "command": "docker compose --env-file .env.local up --remove-orphans --force-recreate -d",
       "options": {
         "cwd": "${workspaceFolder}"
-      },
-      "problemMatcher": []
+      }
     }
   ]
 }
