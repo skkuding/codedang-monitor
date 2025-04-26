@@ -5,13 +5,13 @@ Codedang Monitor는 [Codedang 서비스](https://github.com/skkuding/codedang)�
 
 ## 주요 기능
 
-- **Collect: 텔레메트리 데이터 수집**
+- **Collect: 텔레메트리 데이터 수집**  
   OTEL Collector를 통해 다양한 소스에서 수집된 텔레메트리 데이터를 백엔드(Loki, Tempo, Prometheus)로 전송합니다.
-- **Backend: 텔레메트리 데이터 저장**
+- **Backend: 텔레메트리 데이터 저장**  
   수집된 텔레메트리 데이터를 백엔드(Loki, Tempo, Prometheus)를 거쳐 오브젝트 스토리지(Minio)에 저장합니다.
 - **Visualization: 텔레메트리 데이터 시각화**  
   백엔드로 수집된 데이터를 Grafana를 통해 시각화합니다.
-- **Alerting: 조건에 따른 알림 전송**
+- **Alerting: 조건에 따른 알림 전송**  
   Grafana와 Alertmanager를 통해 알림을 설정하고, 특정 조건에 따라 알림을 받을 수 있습니다.
 
 ## 설치 및 실행
@@ -19,7 +19,7 @@ Codedang Monitor는 [Codedang 서비스](https://github.com/skkuding/codedang)�
 1. **레포지토리 클론 및 디렉토리 이동**
 
    ```bash
-   git clone https://github.com/your-repo/codedang-monitor.git
+   git clone https://github.com/skkuding/codedang-monitor.git
    cd codedang-monitor
    ```
 
@@ -28,7 +28,7 @@ Codedang Monitor는 [Codedang 서비스](https://github.com/skkuding/codedang)�
    VS Code Tasks(`Ctrl + Shift + p`)를 사용하거나 아래 명령어로 실행할 수 있습니다.
 
    ```bash
-   docker compose --env-file .env.local up --remove-orphans --force-recreate -d
+   docker compose --env-file .env.local up
    ```
 
 3. **Codedang 서비스 설정 및 실행**
