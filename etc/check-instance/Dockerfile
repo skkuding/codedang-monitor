@@ -1,10 +1,10 @@
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.13-slim-bookworm AS builder
 WORKDIR /app
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-FROM python:3.11-slim-bookworm
+FROM python:3.13-slim-bookworm
 WORKDIR /app
 
 COPY main.py .

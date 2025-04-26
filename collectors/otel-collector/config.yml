@@ -81,8 +81,7 @@ service:
   #             otlp:
   #               protocol: http/protobuf
   #               endpoint: https://backend:4318
-
 # 5. Extensions
 # https://opentelemetry.io/docs/collector/configuration/#extensions
-extensions:
-  health_check:
+# extensions:
+#   health_check:
