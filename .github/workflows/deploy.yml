@@ -17,7 +17,7 @@ on:
 jobs:
   deploy:
     name: Deploy to ${{ github.event.inputs.target }}
-    runs-on: self-hosted
+    runs-on: self-hosted, target-${{ github.event.inputs.target }}
     environment:
       name: ${{ github.event.inputs.target }}
       url: https://grafana.codedang.com
