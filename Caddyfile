@@ -1,4 +1,4 @@
-grafana.codedang.com {
+http://localhost {
 	log {
 		format console
 		level info
@@ -12,8 +12,4 @@ grafana.codedang.com {
 	handle {
 		reverse_proxy grafana:3000
 	}
-}
-
-sentry.codedang.com {
-	reverse_proxy 127.0.0.1:9876
 }
