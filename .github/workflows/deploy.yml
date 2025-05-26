@@ -1,0 +1,44 @@
+name: Deployment
+
+on:
+  push:
+    branches: main
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "배포 대상을 선택하세요 (production, stage)"
+        required: true
+        default: "stage"
+        type: choice
+        options:
+          - production
+          - stage
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.event.inputs.target }}
+    runs-on: self-hosted, target-${{ github.event.inputs.target }}
+    environment:
+      name: ${{ github.event.inputs.target }}
+      url: https://grafana.codedang.com
+    env:
+      ROOT_HTTP_PORT: ${{ secrets.ROOT_HTTP_PORT }}
+      ROOT_HTTPS_PORT: ${{ secrets.ROOT_HTTPS_PORT }}
+      GF_APP_MODE: production
+      GF_SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      GF_SMTP_USER: ${{ secrets.SMTP_USER }}
+      GF_SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      GF_SMTP_FROM_ADDRESS: ${{ secrets.FROM_ADDRESS }}
+      GF_AUTH_ANONYMOUS_ENABLED: false
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      MINIO_CONSOLE_PORT: ${{ secrets.MINIO_CONSOLE_PORT }}
+      MINIO_ROOT_USER: ${{ secrets.MINIO_ROOT_USER }}
+      MINIO_ROOT_PASSWORD: ${{ secrets.MINIO_ROOT_PASSWORD }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Docker Compose Up
+        run: |
+          docker compose --env-file .env.local up --remove-orphans --force-recreate -d

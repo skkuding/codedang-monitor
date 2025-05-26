@@ -1,1 +1,9 @@
 .env
+.env.stage
+.env.rc
+.env.production
+/backends/tempo/hostname
+/backends/tempo/hosts
+/backends/tempo/resolv.conf
+
+node_modules
