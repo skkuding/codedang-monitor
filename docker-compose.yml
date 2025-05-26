@@ -1,162 +1,169 @@
+version: "3.8"
+
 services:
   caddy:
-    image: caddy:alpine
+    profiles: ["caddy"]
+    image: caddy:2.7.6-alpine
+    container_name: caddy
     restart: always
-    environment:
-      - ROOT_PORT
-      - ROOT_HTTPS_PORT
     ports:
-      - "${ROOT_HTTP_PORT:-80}:80"
-      - "${ROOT_HTTPS_PORT:-443}:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-    command: caddy run --config /etc/caddy/Caddyfile
+      - "80:80"
+      - "443:443"
+    network_mode: host
 
   minio:
+    profiles: ["log", "trace"] 
     container_name: minio
     image: minio/minio:latest
     volumes:
       - minio_data_volume:/data
     environment:
-      - MINIO_ROOT_USER
-      - MINIO_ROOT_PASSWORD
-    expose:
-      - "9000" # minio
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     ports:
-      - "${MINIO_CONSOLE_PORT:-9001}:9001" # minio console
+      - "9000:9000"
+      - "9001:9001"
     command: server data --address ':9000' --console-address ':9001'
     shm_size: "1gb"
 
   createbuckets:
+    profiles: ["log", "trace"]
     image: minio/mc
     volumes:
       - minio_data_volume:/data
     depends_on:
       - minio
     entrypoint: >
-      /bin/sh -c \ "/usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; \ /usr/bin/mc mb data/loki; /usr/bin/mc mb data/tempo; /usr/bin/mc anonymous set public data/tempo; \ /usr/bin/mc anonymous set public data/loki; \ exit 0;"
+      /bin/sh -c "
+      /usr/bin/mc config host add minio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb data/loki-aws;
+      /usr/bin/mc mb data/loki-stage;
+      /usr/bin/mc mb data/tempo;
+      /usr/bin/mc anonymous set public data/tempo;
+      /usr/bin/mc anonymous set public data/loki-aws;
+      /usr/bin/mc anonymous set public data/loki-stage;
+      exit 0;
+      "
 
-  loki:
+  loki-stage:
+    profiles: ["log"]
     image: grafana/loki:latest
-    container_name: loki
+    container_name: loki-stage
     environment:
       - MINIO_ROOT_PASSWORD
       - MINIO_ROOT_USER
-      - MINIO_BUCKET_NAME=loki
-    expose:
-      - "3100"
+    ports:
+      - "3101:3100"
     volumes:
-      - "./backends/loki:/etc/loki"
+      - "$PWD/config/loki/loki-config-stage.yml:/etc/loki/loki-config.yml"
+    command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
+    depends_on:
+      - minio
+    restart: always
+
+  loki-aws:
+    profiles: ["log"]
+    image: grafana/loki:latest
+    container_name: loki-aws
+    environment:
+      - MINIO_ROOT_PASSWORD
+      - MINIO_ROOT_USER
+    ports:
+      - "3100:3100"
+    volumes:
+      - "$PWD/config/loki/loki-config-aws.yml:/etc/loki/loki-config.yml"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     depends_on:
       - minio
     restart: always
 
   prometheus:
+    profiles: ["metric"]
     image: prom/prometheus:latest
     container_name: prometheus
-    expose:
-      - "9090"
+    ports:
+      - "9090:9090"
     volumes:
-      - "./backends/prometheus:/etc/prometheus"
+      - "$PWD/config/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml"
+      - "$PWD/config/prometheus/rules:/etc/prometheus/rules"
       - prometheus_data_volume:/prometheus
-    command:
+    command: 
       - '--config.file=/etc/prometheus/prometheus-config.yml'
       - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-remote-write-receiver'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
     restart: always
 
-  # alertmanager:
-  #   image: prom/alertmanager
-  #   container_name: alertmanager
-  #   volumes:
-  #     - "./etc/alertmanager:/etc/alertmanager"
-  #   command:
-  #     - '--config.file=/etc/alertmanager/config.yml'
-  #   expose:
-  #     - "9093"
-  #   restart: always
+  alertmanager:
+    profiles: ["metric"]
+    image: prom/alertmanager
+    container_name: alertmanager
+    volumes:
+      - "$PWD/config/alertmanager/config.yml:/etc/alertmanager/config.yml"
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+    ports:
+      - "9093:9093"
+    restart: always
 
-  # prometheus-msteams:
-  #   image: docker.io/bzon/prometheus-msteams:v1.1.4
-  #   container_name: prometheus-msteams
-  #   restart: always
-  #   environment:
-  #     - TEAMS_INCOMING_WEBHOOK_URL=${MS_WEBHOOK_URL}
-  #     - TEAMS_REQUEST_URI=alertmanager
-  #   expose:
-  #     - "2000"
+  prometheus-msteams:
+    profiles: ["metric"]
+    image: docker.io/bzon/prometheus-msteams:v1.1.4
+    container_name: prometheus-msteams
+    restart: always
+    environment:
+      - TEAMS_INCOMING_WEBHOOK_URL=${MS_WEBHOOK_URL}
+      - TEAMS_REQUEST_URI=alertmanager
+    expose:
+      - "2000"
 
   check-instance:
-    build: ./etc/check-instance
+    profiles: ["metric"]
+    build: ./check-instance
     environment:
-      - PROMETHEUS_URL
-      - MS_WEBHOOK_URL
+      - WEBHOOK_URL=${MS_WEBHOOK_URL}
     container_name: check-instance
+    command: ["python", "check_instance.py"]
     volumes:
       - check_instance_data_volume:/app
     depends_on:
       - prometheus
     restart: always
-
+    
   tempo:
+    profiles: ["trace"]
     image: grafana/tempo:latest
     container_name: tempo
     environment:
       - MINIO_ROOT_PASSWORD
       - MINIO_ROOT_USER
-      - MINIO_BUCKET_NAME=tempo
-    expose:
-      - "3200"
-      - "4317"
-    volumes:
-      - ./backends/tempo:/etc
-    command:
-      - "-config.file=/etc/tempo.yml"
-      - "-config.expand-env=true"
-    depends_on:
-      - minio
-    restart: unless-stopped
-
-  otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
-    container_name: otel-collector
-    environment:
-      - MINIO_ROOT_PASSWORD
-      - MINIO_ROOT_USER
-      - OTEL_COLLECTOR_GRPC_RECEIVER_PORT
     ports:
-      - "${OTEL_COLLECTOR_GRPC_RECEIVER_PORT:-4317}:4317" # <- otlp grpc
-    expose:
-      - "8889" # <- prometheus
+      - "3200:3200"   # tempo
+      - "4317:4317"   # otlp grpc
+      - "4318:4318"   # otlp http
     volumes:
-      - ./collectors/otel-collector:/etc/otel-collector
-    command:
-      - "--config=/etc/otel-collector/config.yml"
+      - $PWD/config/tempo/tempo.yml:/etc/tempo.yml
+    command: 
+      - "-config.file=/etc/tempo.yml"
+      - "-config.expand-env=true" 
     depends_on:
       - minio
     restart: unless-stopped
 
   grafana:
+    profiles: ["log", "trace", "metric"]
     image: grafana/grafana:latest
-    environment:
-      - GF_APP_MODE
-      - GF_STMP_HOST
-      - GF_SMTP_USER
-      - GF_SMTP_PASSWORD
-      - GF_SMTP_FROM_ADDRESS
-      - GF_AUTH_ANONYMOUS_ENABLED
-      - GF_AUTH_ANONYMOUS_ORG_ROLE
-      - GH_CLIENT_ID
-      - GH_CLIENT_SECRET
+    env_file:
+      - .env
     container_name: grafana
-    restart: unless-stopped
-    expose:
-      - "3000"
+    restart:
+      unless-stopped
+    ports:
+      - "3000:3000"
     volumes:
-      - "./grafana:/etc/grafana"
       - "grafana_storage:/var/lib/grafana"
+      - "$PWD/config/grafana/grafana.ini:/etc/grafana/grafana.ini"
 
 volumes:
   grafana_storage: {}

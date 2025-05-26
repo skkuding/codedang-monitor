@@ -7,10 +7,10 @@ import os
 # from message_card_template import message_card
 
 # Prometheus 서버 주소
-PROMETHEUS_URL = os.environ.get("PROMETHEUS_URL", "http://localhost:9090")
+PROMETHEUS_URL = "http://prometheus:9090"
 
 # MS Teams Incoming Webhook URL
-MS_WEBHOOK_URL = os.environ.get("MS_WEBHOOK_URL")
+WEBHOOK_URL = os.environ["WEBHOOK_URL"]
 
 # Prometheus queries
 QUERIES = {
@@ -72,7 +72,7 @@ def send_alert(message):
         "text": message.replace("\n", "<br>"),
     }
     try:
-        requests.post(MS_WEBHOOK_URL, json=payload)
+        requests.post(WEBHOOK_URL, json=payload)
     except requests.RequestException as e:
         print(f"Failed to send alert: {e}")
 

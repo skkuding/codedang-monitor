@@ -1,15 +1,43 @@
-http://localhost {
+grafana.codedang.com {
 	log {
 		format console
-		level info
+	}
+	
+	handle /lokiaws/* {
+		@blocked not remote_ip {$AWS_REQ_IP}
+		respond @blocked "Forbidden" 403
+
+		uri strip_prefix /lokiaws
+		reverse_proxy 127.0.0.1:3100
 	}
 
-	handle /alertmanager-console* {
-		uri strip_prefix /alertmanager-console
-		reverse_proxy alertmanager:9093 # includes console
+	# handle /agent* {
+	# 	handle /agent/metric* {
+	# 		uri strip_prefix /agent/metric
+	# 		reverse_proxy 127.0.0.1:4318
+	# 	}
+
+	# 	handle {
+	# 		uri strip_prefix /agent
+	# 		reverse_proxy 127.0.0.1:12345
+	# 	}
+	# }
+
+	handle /prometheus/* {
+		uri strip_prefix /prometheus
+		reverse_proxy 127.0.0.1:9090
+	}
+
+	handle /tempo/* {
+		uri strip_prefix /tempo
+		reverse_proxy 127.0.0.1:4318
 	}
 
 	handle {
-		reverse_proxy grafana:3000
+		reverse_proxy 127.0.0.1:3000
 	}
+}
+
+sentry.codedang.com {
+        reverse_proxy 127.0.0.1:9876
 }
