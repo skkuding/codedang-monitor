@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker:dev",
+      "detail": "Local 환경에서 모니터링 서버 실행",
+      "type": "shell",
+      "command": "docker compose --env-file .env.local up --remove-orphans --force-recreate -d",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  ]
+}
