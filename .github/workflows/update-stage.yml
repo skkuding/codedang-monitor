@@ -58,10 +58,14 @@ jobs:
         run: |
           docker compose --profile log --profile trace --profile metric restart
 
-      - name: Update Caddyfile and reload Caddy
+      - name: Set Caddyfile Environment Variables
         run: |
-          # 환경 변수 치환 (로컬 Caddyfile 수정)
           sed -i 's/{$AWS_REQ_IP}/${{secrets.AWS_REQ_IP}}/' ./Caddyfile
 
-          # 컨테이너 내부에서 Caddy 리로드
+      - name: Copy Caddyfile into Caddy Container
+        run: |
+          docker cp ./Caddyfile caddy:/etc/caddy/Caddyfile
+
+      - name: Gracefully reload Caddy
+        run: |
           docker exec -w /etc/caddy caddy caddy reload
