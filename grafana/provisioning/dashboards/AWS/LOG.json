@@ -100,7 +100,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "description": "시스템 운영에 치명적일 수 있는 오류만을 출력",
       "gridPos": {
@@ -125,7 +125,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "editorMode": "code",
           "expr": "{container_name=~\".*Api.*\"} |~ `(?i)error` != `\"level\\\":\\\"info\\\"`",
@@ -139,7 +139,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "description": "AWS 서버의 ECS_API - Client 에서 오는 로그입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
       "gridPos": {
@@ -164,7 +164,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "editorMode": "builder",
           "expr": "{container_name=~\".*Client-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
@@ -178,7 +178,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "description": "AWS 서버의 ECS_API - Admin 에서 오는 로그입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
       "gridPos": {
@@ -203,7 +203,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "editorMode": "code",
           "expr": "{container_name=~\".*Admin-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
@@ -217,7 +217,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "description": "AWS 서버의 IRIS 에서 오는 로그입니다! ",
       "gridPos": {
@@ -242,7 +242,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "editorMode": "builder",
           "expr": "{container_name=~\".*Iris.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",

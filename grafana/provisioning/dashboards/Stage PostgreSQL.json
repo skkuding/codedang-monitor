@@ -26,7 +26,7 @@
     {
       "datasource": {
         "type": "grafana-postgresql-datasource",
-        "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+        "uid": "postgresql"
       },
       "fieldConfig": {
         "defaults": {
@@ -79,7 +79,7 @@
         {
           "datasource": {
             "type": "grafana-postgresql-datasource",
-            "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+            "uid": "postgresql"
           },
           "editorMode": "code",
           "format": "table",
@@ -128,7 +128,7 @@
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
-          "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+          "uid": "postgresql"
         },
         "definition": "SELECT table_name \nFROM information_schema.tables \nWHERE table_schema='public' AND table_type='BASE TABLE'",
         "hide": 0,
@@ -152,7 +152,7 @@
         },
         "datasource": {
           "type": "grafana-postgresql-datasource",
-          "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+          "uid": "postgresql"
         },
         "definition": "SELECT column_name \nFROM information_schema.columns \nWHERE table_name = '$table'\nORDER BY ordinal_position",
         "description": "Descending order",

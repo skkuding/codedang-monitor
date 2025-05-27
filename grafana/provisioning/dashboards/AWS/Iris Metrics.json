@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -105,7 +105,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -125,7 +125,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "description": "",
       "fieldConfig": {
@@ -207,7 +207,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
