@@ -5,6 +5,11 @@ server:
   grpc_listen_port: 0
   log_level: info
 
+distributor:
+  otlp_config:
+    default_resource_attributes_as_index_labels:
+      - "service.environment"
+
 common:
   instance_addr: 127.0.0.1
   path_prefix: /tmp/loki
