@@ -96,7 +96,7 @@
       "collapsed": false,
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "gridPos": {
         "h": 1,
@@ -110,7 +110,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "refId": "A"
         }
@@ -390,7 +390,7 @@
       "collapsed": false,
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "gridPos": {
         "h": 1,
@@ -404,7 +404,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "refId": "A"
         }
@@ -934,7 +934,7 @@
       "collapsed": false,
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "gridPos": {
         "h": 1,
@@ -948,7 +948,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "refId": "A"
         }
@@ -1914,7 +1914,7 @@
       "collapsed": false,
       "datasource": {
         "type": "loki",
-        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+        "uid": "loki"
       },
       "gridPos": {
         "h": 1,
@@ -1928,7 +1928,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+            "uid": "loki"
           },
           "refId": "A"
         }

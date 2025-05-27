@@ -100,7 +100,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+        "uid": "loki"
       },
       "fieldConfig": {
         "defaults": {
@@ -152,7 +152,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+            "uid": "loki"
           },
           "editorMode": "builder",
           "expr": "count by(req_url) (rate({container=\"backend-client\"} | json | level = `error` [$__auto]))",
@@ -167,7 +167,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+        "uid": "loki"
       },
       "description": "'error'를 포함하고 있는 모든 로그를 출력합니다. ",
       "gridPos": {
@@ -192,7 +192,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+            "uid": "loki"
           },
           "editorMode": "code",
           "expr": "{container=\"backend-client\"} |~ `(?i)error` | json | label_format status_color=\"{{if and (ge .res_statusCode `200`) (lt .res_statusCode `300`)}}94{{else if and (ge .res_statusCode `300`) (lt .res_statusCode `400`) }}93{{else}}91{{end}}\" | label_format msg_color=\"{{if (eq .msg `request completed`)}}92{{else}}91{{end}}\" | line_format \"\\u001b[{{ .status_color }}m{{alignLeft 4 .res_statusCode}}\\u001b[0m {{alignLeft 6 .req_method}} {{alignLeft 50 .req_url}} \\u001b[{{ .msg_color }}m{{.msg}}\"",
@@ -206,7 +206,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+        "uid": "loki"
       },
       "description": "스테이지서버의 Backend-Client에서 오는 에러입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
       "gridPos": {
@@ -231,7 +231,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+            "uid": "loki"
           },
           "editorMode": "builder",
           "expr": "{container=\"backend-client\"} |= `info` !~ `(?i)Uptime-Kuma` | json | label_format status_color=\"{{if and (ge .res_statusCode `200`) (lt .res_statusCode `300`)}}94{{else if and (ge .res_statusCode `300`) (lt .res_statusCode `400`) }}93{{else}}91{{end}}\" | label_format msg_color=\"{{if (eq .msg `request completed`)}}92{{else}}91{{end}}\" | line_format \"\\u001b[{{ .status_color }}m{{alignLeft 4 .res_statusCode}}\\u001b[0m {{alignLeft 6 .req_method}} {{alignLeft 50 .req_url}} \\u001b[{{ .msg_color }}m{{.msg}}\"",
@@ -245,7 +245,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+        "uid": "loki"
       },
       "description": "스테이지서버의 Backend-Admin에서 오는 에러입니다! ",
       "gridPos": {
@@ -270,7 +270,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+            "uid": "loki"
           },
           "editorMode": "code",
           "expr": "{container=\"backend-admin\"} |= `info` |  json | label_format status_color=\"{{if and (ge .res_statusCode `200`) (lt .res_statusCode `300`)}}94{{else if and (ge .res_statusCode `300`) (lt .res_statusCode `400`) }}93{{else}}91{{end}}\" | label_format msg_color=\"{{if (eq .msg `request completed`)}}92{{else}}91{{end}}\" | line_format \"\\u001b[{{ .status_color }}m{{alignLeft 4 .res_statusCode}}\\u001b[0m {{alignLeft 6 .req_method}} {{alignLeft 20 .req_body_operationName}} \\u001b[{{ .msg_color }}m{{.msg}}\"",
@@ -297,7 +297,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+        "uid": "loki"
       },
       "description": "Prisma Debug 로그입니다! ",
       "gridPos": {
@@ -322,7 +322,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+            "uid": "loki"
           },
           "editorMode": "builder",
           "expr": "{container=\"backend-client\"} |= `debug` | json | line_format `{{ .query}} `",
@@ -336,7 +336,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+        "uid": "loki"
       },
       "description": "Prisma Debug 로그입니다! ",
       "gridPos": {
@@ -363,7 +363,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+            "uid": "loki"
           },
           "editorMode": "builder",
           "expr": "{container=\"backend-admin\"} |= `debug` | json | line_format `{{ .query}} `",
