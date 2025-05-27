@@ -1,16 +1,33 @@
 name: Local Deployment
 
 on:
-  push:
-    branches: main
+  # push:
+  #   branches: main
   workflow_dispatch:
+    inputs:
+      target:
+        description: "배포 대상을 선택하세요 (production, rc, stage)"
+        required: true
+        default: "stage"
+        type: choice
+        options:
+          - production
+          - rc
+          - stage
+      ref:
+        description: "체크아웃할 브랜치, 태그 또는 SHA (비워두면 기본값 main)"
+        required: false
+        default: "main"
+        type: string
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: target-${{ github.event.inputs.target }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || 'main' }}
 
       - name: Load dotenv from secret for Grafana Configuration
         run: |
