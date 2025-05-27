@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
+  "id": 24,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -39,7 +39,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -71,7 +72,7 @@
         "showThresholdMarkers": false,
         "sizing": "auto"
       },
-      "pluginVersion": "12.0.1",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -124,7 +125,7 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "12.0.1",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -168,13 +169,14 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "12.0.1",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "loki"
           },
+          "direction": "backward",
           "editorMode": "builder",
           "expr": "{container_name=~\".*Client-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
           "queryType": "range",
@@ -212,7 +214,7 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "12.0.1",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -257,7 +259,7 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "12.0.1",
+      "pluginVersion": "11.5.0",
       "targets": [
         {
           "datasource": {
@@ -276,7 +278,7 @@
   ],
   "preload": false,
   "refresh": "",
-  "schemaVersion": 41,
+  "schemaVersion": 40,
   "tags": ["deploy-server", "log"],
   "templating": {
     "list": []
@@ -289,5 +291,6 @@
   "timezone": "",
   "title": "LOG",
   "uid": "f0149ec2-7bf4-4d84-ab7a-131d330149fa",
-  "version": 2
+  "version": 9,
+  "weekStart": ""
 }
