@@ -34,3 +34,24 @@ datasources:
         datasourceUid: prometheus
       streamingEnabled:
         search: true
+
+  # TODO: 연결 테스트
+  - name: CloudWatch
+    type: cloudwatch
+    uid: cloudwatch
+    jsonData:
+      authType: default
+      defaultRegion: ap-northeast-2
+    editable: true # TODO: 연결 테스트 후 false로 변경
+
+  # TODO: 연결 테스트
+  - name: PostgreSQL
+    type: postgres
+    uid: postgresql
+    url: ${PG_HOST}:${PG_PORT}
+    user: ${PG_USER}
+    password: ${PG_PASSWORD}
+    jsonData:
+      database: ${PG_DATABASE}
+      sslmode: disable
+    editable: true # TODO: 연결 테스트 후 false로 변경
