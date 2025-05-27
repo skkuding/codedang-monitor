@@ -32,6 +32,8 @@ exporters:
 
   prometheus:
     endpoint: "0.0.0.0:8889"
+    resource_to_telemetry_conversion:
+      enabled: true
 
   otlp/trace:
     endpoint: tempo:4317
@@ -44,15 +46,15 @@ service:
   pipelines:
     logs:
       receivers: [otlp]
-      processors: []
+      processors: [batch]
       exporters: [otlphttp/logs]
     metrics:
       receivers: [otlp]
-      processors: []
+      processors: [batch]
       exporters: [prometheus]
     traces:
       receivers: [otlp]
-      processors: []
+      processors: [batch]
       exporters: [otlp/trace]
 
   # Collector 자체 모니터링을 위한 설정
