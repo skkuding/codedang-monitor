@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 18,
+  "id": 7,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -39,8 +39,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -103,6 +102,10 @@
         "uid": "loki"
       },
       "description": "시스템 운영에 치명적일 수 있는 오류만을 출력",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 5,
         "w": 19,
@@ -142,6 +145,10 @@
         "uid": "loki"
       },
       "description": "AWS 서버의 ECS_API - Client 에서 오는 로그입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 8,
         "w": 22,
@@ -151,6 +158,7 @@
       "id": 10,
       "options": {
         "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
@@ -159,15 +167,16 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "loki"
           },
+          "direction": "backward",
           "editorMode": "builder",
-          "expr": "{container_name=~\".*Client-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "expr": "{service_name=\"CLIENT-API\"}",
           "queryType": "range",
           "refId": "A"
         }
@@ -181,6 +190,10 @@
         "uid": "loki"
       },
       "description": "AWS 서버의 ECS_API - Admin 에서 오는 로그입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 8,
         "w": 22,
@@ -220,6 +233,10 @@
         "uid": "loki"
       },
       "description": "AWS 서버의 IRIS 에서 오는 로그입니다! ",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
         "h": 8,
         "w": 22,
@@ -254,8 +271,9 @@
       "type": "logs"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 39,
+  "schemaVersion": 41,
   "tags": ["deploy-server", "log"],
   "templating": {
     "list": []
@@ -264,12 +282,9 @@
     "from": "now-12h",
     "to": "now"
   },
-  "timepicker": {
-    "hidden": false
-  },
+  "timepicker": {},
   "timezone": "",
   "title": "LOG",
   "uid": "f0149ec2-7bf4-4d84-ab7a-131d330149fa",
-  "version": 18,
-  "weekStart": ""
+  "version": 2
 }
