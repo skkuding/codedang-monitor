@@ -44,15 +44,15 @@ service:
   pipelines:
     logs:
       receivers: [otlp]
-      processors: []
+      processors: [batch]
       exporters: [otlphttp/logs]
     metrics:
       receivers: [otlp]
-      processors: []
+      processors: [batch]
       exporters: [prometheus]
     traces:
       receivers: [otlp]
-      processors: []
+      processors: [batch]
       exporters: [otlp/trace]
 
   # Collector 자체 모니터링을 위한 설정
