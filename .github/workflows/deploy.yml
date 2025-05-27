@@ -14,6 +14,11 @@ on:
           - production
           - rc
           - stage
+      ref:
+        description: "체크아웃할 브랜치, 태그 또는 SHA (비워두면 기본값 main)"
+        required: false
+        default: "main"
+        type: string
 
 jobs:
   deploy:
@@ -39,6 +44,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || 'main' }}
 
       - name: Docker Compose Up
         run: |
