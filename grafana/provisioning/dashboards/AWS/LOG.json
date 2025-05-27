@@ -133,7 +133,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "{container_name=~\".*Api.*\"} |~ `(?i)error` != `\"level\\\":\\\"info\\\"`",
+          "expr": "{service_name=~\".*-API.*\"} |~ `(?i)error` != `\"level\\\":\\\"info\\\"`",
           "queryType": "range",
           "refId": "A"
         }
