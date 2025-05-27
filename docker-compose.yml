@@ -3,7 +3,7 @@ services:
     image: caddy:alpine
     restart: always
     environment:
-      - ROOT_PORT
+      - ROOT_HTTP_PORT
       - ROOT_HTTPS_PORT
     ports:
       - "${ROOT_HTTP_PORT:-80}:80"
