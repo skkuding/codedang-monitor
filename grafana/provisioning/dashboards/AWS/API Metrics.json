@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "description": "",
       "fieldConfig": {
@@ -79,7 +79,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "count(group(system_cpu_utilization{job=~\"$job\"}) by (instance))",
@@ -96,7 +96,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -146,7 +146,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "(25*sum(avg_over_time(process_cpu_utilization{job=~\"$job\"}[5m]))\n+25*sum(avg_over_time(system_cpu_utilization{job=~\"$job\", system_cpu_state!=\"idle\"}[5m])) )\n/count(sum by (instance) (avg_over_time(process_cpu_utilization{job=~\"$job\"}[5m])))",
@@ -163,7 +163,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -217,7 +217,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "25*sum by (instance) (avg_over_time(process_cpu_utilization{job=~\"$job\"}[5m]))+25*sum by (instance) (avg_over_time(system_cpu_utilization{job=~\"$job\", system_cpu_state!=\"idle\"}[5m]))",
@@ -233,7 +233,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -286,7 +286,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "code",
@@ -319,7 +319,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "description": "AWS EC2 > Codedang-API-Instance > Monitoring",
       "fieldConfig": {
@@ -406,7 +406,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "25*sum by (instance) (avg_over_time(process_cpu_utilization{job=~\"backend-client-metric\"}[5m]))+25*sum by (instance) (avg_over_time(system_cpu_utilization{job=~\"backend-client-metric\", system_cpu_state!=\"idle\"}[5m]))",
@@ -418,7 +418,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "25*sum by (instance) (avg_over_time(process_cpu_utilization{job=~\"backend-admin-metric\"}[5m]))+25*sum by (instance) (avg_over_time(system_cpu_utilization{job=~\"backend-admin-metric\", system_cpu_state!=\"idle\"}[5m]))",
@@ -431,7 +431,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "25*sum(avg_over_time(process_cpu_utilization[5m]))+25*sum(avg_over_time(system_cpu_utilization{system_cpu_state!=\"idle\"}[5m]))",
@@ -448,7 +448,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "description": "AWS ECS > Codedang-API > Codedang-Client-API-Service > Health",
       "fieldConfig": {
@@ -530,7 +530,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "100*sum (avg_over_time(system_cpu_utilization{job=\"backend-client-metric\", system_cpu_state!=\"idle\"}[5m])) + 100*sum (avg_over_time(process_cpu_utilization{job=\"backend-client-metric\"}[5m]))",
@@ -542,7 +542,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "100*sum (avg_over_time(system_cpu_utilization{job=\"backend-admin-metric\", system_cpu_state!=\"idle\"}[5m])) + 100*sum (avg_over_time(process_cpu_utilization{job=\"backend-admin-metric\"}[5m]))",
@@ -572,7 +572,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -620,7 +620,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "system_network_dropped_total{}",
@@ -636,7 +636,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
@@ -684,7 +684,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "system_network_errors_total{}",
@@ -700,7 +700,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "description": "Received packet bytes",
       "fieldConfig": {
@@ -816,7 +816,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "sum(increase(system_network_io_total{network_io_direction=\"receive\", job=\"backend-client-metric\"}[1m]))",
@@ -829,7 +829,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "increase(system_network_io_total{network_io_direction=\"receive\", job=\"backend-admin-metric\"}[1m])",
@@ -842,7 +842,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "sum(increase(system_network_io_total{network_io_direction=\"receive\"}[1m]))",
@@ -859,7 +859,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+        "uid": "prometheus"
       },
       "description": "Transmitted packet bytes",
       "fieldConfig": {
@@ -975,7 +975,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "disableTextWrap": false,
           "editorMode": "code",
@@ -991,7 +991,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "increase(system_network_io_total{network_io_direction=\"transmit\", job=\"backend-admin-metric\"}[1m])",
@@ -1004,7 +1004,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "e457f199-62e7-4352-bb9a-9a747492a74f"
+            "uid": "prometheus"
           },
           "editorMode": "code",
           "expr": "sum(increase(system_network_io_total{network_io_direction=\"transmit\"}[1m]))",
