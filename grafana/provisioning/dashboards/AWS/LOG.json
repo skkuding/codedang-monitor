@@ -178,7 +178,7 @@
           },
           "direction": "backward",
           "editorMode": "builder",
-          "expr": "{container_name=~\".*Client-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "expr": "{service_name=\"CLIENT-API\"} !~ `(?i)Uptime-Kuma`",
           "queryType": "range",
           "refId": "A"
         }
@@ -223,7 +223,7 @@
           },
           "direction": "backward",
           "editorMode": "builder",
-          "expr": "{service_name=\"ADMIN-API\"} |= ``",
+          "expr": "{service_name=\"ADMIN-API\"} !~ `(?i)Uptime-Kuma`",
           "queryType": "range",
           "refId": "A"
         }
@@ -267,7 +267,7 @@
             "uid": "loki"
           },
           "editorMode": "builder",
-          "expr": "{container_name=~\".*Iris.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "expr": "{service_name=\"IRIS\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
           "queryType": "range",
           "refId": "A"
         }
