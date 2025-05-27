@@ -181,7 +181,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -224,7 +224,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -268,7 +268,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -312,7 +312,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -502,7 +502,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -631,7 +631,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -761,7 +761,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -890,7 +890,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -1991,7 +1991,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -2093,7 +2093,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -2253,7 +2253,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -2378,7 +2378,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -2512,7 +2512,7 @@
           },
           "datasource": {
             "type": "cloudwatch",
-            "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+            "uid": "cloudwatch"
           },
           "dimensions": {
             "TargetGroup": "*"
@@ -2594,7 +2594,7 @@
         "current": {
           "selected": false,
           "text": "cloudwatch",
-          "value": "ccd145b2-435a-4886-a7a1-2188547128ad"
+          "value": "cloudwatch"
         },
         "hide": 0,
         "includeAll": false,
@@ -2668,7 +2668,7 @@
           "value": "rabbit@localhost"
         },
         "datasource": {
-          "uid": "ccd145b2-435a-4886-a7a1-2188547128ad"
+          "uid": "cloudwatch"
         },
         "definition": "dimension_values($region, AWS/AmazonMQ, SystemCpuUtilization, Node, {\"Broker\":\"$broker\"})",
         "hide": 0,
