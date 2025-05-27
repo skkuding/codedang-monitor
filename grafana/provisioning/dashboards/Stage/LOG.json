@@ -1,0 +1,396 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "스테이지 서버 로그를 보여줍니다! ",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 14,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Dashboard --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "# of Error Logs",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 11,
+      "options": {
+        "minVizHeight": 200,
+        "minVizWidth": 200,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 9,
+          "refId": "A"
+        }
+      ],
+      "title": "Number Of Errors",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "labelsToFields": false,
+            "mode": "seriesToRows",
+            "reducers": ["sum"]
+          }
+        }
+      ],
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 0
+      },
+      "id": 9,
+      "options": {
+        "displayLabels": ["value"],
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "right",
+          "showLegend": false,
+          "values": []
+        },
+        "pieType": "pie",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+          },
+          "editorMode": "builder",
+          "expr": "count by(req_url) (rate({container=\"backend-client\"} | json | level = `error` [$__auto]))",
+          "hide": false,
+          "queryType": "range",
+          "refId": "C"
+        }
+      ],
+      "title": "Total Count: of Error",
+      "type": "piechart"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+      },
+      "description": "'error'를 포함하고 있는 모든 로그를 출력합니다. ",
+      "gridPos": {
+        "h": 5,
+        "w": 15,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+          },
+          "editorMode": "code",
+          "expr": "{container=\"backend-client\"} |~ `(?i)error` | json | label_format status_color=\"{{if and (ge .res_statusCode `200`) (lt .res_statusCode `300`)}}94{{else if and (ge .res_statusCode `300`) (lt .res_statusCode `400`) }}93{{else}}91{{end}}\" | label_format msg_color=\"{{if (eq .msg `request completed`)}}92{{else}}91{{end}}\" | line_format \"\\u001b[{{ .status_color }}m{{alignLeft 4 .res_statusCode}}\\u001b[0m {{alignLeft 6 .req_method}} {{alignLeft 50 .req_url}} \\u001b[{{ .msg_color }}m{{.msg}}\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Log with Error",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+      },
+      "description": "스테이지서버의 Backend-Client에서 오는 에러입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
+      "gridPos": {
+        "h": 10,
+        "w": 14,
+        "x": 0,
+        "y": 5
+      },
+      "id": 10,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+          },
+          "editorMode": "builder",
+          "expr": "{container=\"backend-client\"} |= `info` !~ `(?i)Uptime-Kuma` | json | label_format status_color=\"{{if and (ge .res_statusCode `200`) (lt .res_statusCode `300`)}}94{{else if and (ge .res_statusCode `300`) (lt .res_statusCode `400`) }}93{{else}}91{{end}}\" | label_format msg_color=\"{{if (eq .msg `request completed`)}}92{{else}}91{{end}}\" | line_format \"\\u001b[{{ .status_color }}m{{alignLeft 4 .res_statusCode}}\\u001b[0m {{alignLeft 6 .req_method}} {{alignLeft 50 .req_url}} \\u001b[{{ .msg_color }}m{{.msg}}\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Stage-client",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+      },
+      "description": "스테이지서버의 Backend-Admin에서 오는 에러입니다! ",
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 14,
+        "y": 5
+      },
+      "id": 3,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+          },
+          "editorMode": "code",
+          "expr": "{container=\"backend-admin\"} |= `info` |  json | label_format status_color=\"{{if and (ge .res_statusCode `200`) (lt .res_statusCode `300`)}}94{{else if and (ge .res_statusCode `300`) (lt .res_statusCode `400`) }}93{{else}}91{{end}}\" | label_format msg_color=\"{{if (eq .msg `request completed`)}}92{{else}}91{{end}}\" | line_format \"\\u001b[{{ .status_color }}m{{alignLeft 4 .res_statusCode}}\\u001b[0m {{alignLeft 6 .req_method}} {{alignLeft 20 .req_body_operationName}} \\u001b[{{ .msg_color }}m{{.msg}}\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Stage-admin",
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 6,
+      "panels": [],
+      "title": "DEBUG Logs",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+      },
+      "description": "Prisma Debug 로그입니다! ",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 5,
+      "options": {
+        "dedupStrategy": "exact",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+          },
+          "editorMode": "builder",
+          "expr": "{container=\"backend-client\"} |= `debug` | json | line_format `{{ .query}} `",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Prisma Logs - Client",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+      },
+      "description": "Prisma Debug 로그입니다! ",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 16
+      },
+      "id": 8,
+      "maxPerRow": 2,
+      "options": {
+        "dedupStrategy": "exact",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "fc432088-d1be-43a1-a561-9380bff7da7b"
+          },
+          "editorMode": "builder",
+          "expr": "{container=\"backend-admin\"} |= `debug` | json | line_format `{{ .query}} `",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Prisma Logs - Admin",
+      "type": "logs"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": ["log", "stage-server"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false
+  },
+  "timezone": "",
+  "title": "LOG",
+  "uid": "b7684871-c8aa-4b9e-966b-9eba643fa716",
+  "version": 28,
+  "weekStart": ""
+}

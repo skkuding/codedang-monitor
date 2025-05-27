@@ -1,0 +1,184 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Stage 환경의 PostgreSQL(RDS) 데이터를 보여줍니다.\nMade by 최영주",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 13,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 22,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT * FROM public.$table ORDER BY $order desc",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          },
+          "table": "user_group"
+        }
+      ],
+      "title": "Table",
+      "type": "table"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "user",
+          "value": "user"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+        },
+        "definition": "SELECT table_name \nFROM information_schema.tables \nWHERE table_schema='public' AND table_type='BASE TABLE'",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Table Name",
+        "multi": false,
+        "name": "table",
+        "options": [],
+        "query": "SELECT table_name \nFROM information_schema.tables \nWHERE table_schema='public' AND table_type='BASE TABLE'",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "id",
+          "value": "id"
+        },
+        "datasource": {
+          "type": "grafana-postgresql-datasource",
+          "uid": "de5b12a8-a89b-4a8d-bbb9-54ba49756025"
+        },
+        "definition": "SELECT column_name \nFROM information_schema.columns \nWHERE table_name = '$table'\nORDER BY ordinal_position",
+        "description": "Descending order",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Order By",
+        "multi": false,
+        "name": "order",
+        "options": [],
+        "query": "SELECT column_name \nFROM information_schema.columns \nWHERE table_name = '$table'\nORDER BY ordinal_position",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "\bStage PostreSQL",
+  "uid": "f406fc51-664a-4beb-93df-3d2576b8e3ae",
+  "version": 7,
+  "weekStart": ""
+}

@@ -1,0 +1,275 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "AWS 서버 로그를 보여줍니다! ",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 18,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Dashboard --"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "# of Error Logs",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 16,
+      "options": {
+        "minVizHeight": 200,
+        "minVizWidth": 200,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 14,
+          "refId": "A"
+        }
+      ],
+      "title": "Number Of Errors",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "labelsToFields": false,
+            "mode": "seriesToRows",
+            "reducers": ["sum"]
+          }
+        }
+      ],
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+      },
+      "description": "시스템 운영에 치명적일 수 있는 오류만을 출력",
+      "gridPos": {
+        "h": 5,
+        "w": 19,
+        "x": 3,
+        "y": 0
+      },
+      "id": 14,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+          },
+          "editorMode": "code",
+          "expr": "{container_name=~\".*Api.*\"} |~ `(?i)error` != `\"level\\\":\\\"info\\\"`",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Log with Error (TEST)",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+      },
+      "description": "AWS 서버의 ECS_API - Client 에서 오는 로그입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
+      "gridPos": {
+        "h": 8,
+        "w": 22,
+        "x": 0,
+        "y": 5
+      },
+      "id": 10,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+          },
+          "editorMode": "builder",
+          "expr": "{container_name=~\".*Client-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Client",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+      },
+      "description": "AWS 서버의 ECS_API - Admin 에서 오는 로그입니다! \n(Uptime Kuma에서 오는 리퀘스트는 제거했습니다.)",
+      "gridPos": {
+        "h": 8,
+        "w": 22,
+        "x": 0,
+        "y": 13
+      },
+      "id": 12,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+          },
+          "editorMode": "code",
+          "expr": "{container_name=~\".*Admin-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Admin",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+      },
+      "description": "AWS 서버의 IRIS 에서 오는 로그입니다! ",
+      "gridPos": {
+        "h": 8,
+        "w": 22,
+        "x": 0,
+        "y": 21
+      },
+      "id": 13,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "d08dfedf-bf49-4756-9dee-03a9235e87a2"
+          },
+          "editorMode": "builder",
+          "expr": "{container_name=~\".*Iris.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "IRIS",
+      "type": "logs"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 39,
+  "tags": ["deploy-server", "log"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-12h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": false
+  },
+  "timezone": "",
+  "title": "LOG",
+  "uid": "f0149ec2-7bf4-4d84-ab7a-131d330149fa",
+  "version": 18,
+  "weekStart": ""
+}
