@@ -24,10 +24,11 @@ jobs:
   deploy:
     runs-on: target-${{ github.event.inputs.target }}
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repository with Full History
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.ref || 'main' }}
+          fetch-depth: 0 # 전체 히스토리를 가져옵니다
 
       - name: Load dotenv from secret for Grafana Configuration
         run: |
