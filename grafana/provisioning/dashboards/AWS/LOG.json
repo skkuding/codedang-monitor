@@ -71,7 +71,7 @@
         "showThresholdMarkers": false,
         "sizing": "auto"
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
@@ -115,6 +115,7 @@
       "id": 14,
       "options": {
         "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
@@ -123,7 +124,7 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
@@ -174,9 +175,8 @@
             "type": "loki",
             "uid": "loki"
           },
-          "direction": "backward",
           "editorMode": "builder",
-          "expr": "{service_name=\"CLIENT-API\"}",
+          "expr": "{container_name=~\".*Client-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
           "queryType": "range",
           "refId": "A"
         }
@@ -203,6 +203,7 @@
       "id": 12,
       "options": {
         "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
@@ -211,15 +212,16 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
             "type": "loki",
             "uid": "loki"
           },
-          "editorMode": "code",
-          "expr": "{container_name=~\".*Admin-Api.*\"} |= `info` !~ `(?i)Uptime-Kuma` | pattern `<_>=<ec2_instance_id> log=<log>` | logfmt --strict --keep-empty log | line_format `{{.log}}`",
+          "direction": "backward",
+          "editorMode": "builder",
+          "expr": "{service_name=\"ADMIN-API\"} |= ``",
           "queryType": "range",
           "refId": "A"
         }
@@ -246,6 +248,7 @@
       "id": 13,
       "options": {
         "dedupStrategy": "none",
+        "enableInfiniteScrolling": false,
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
@@ -254,7 +257,7 @@
         "sortOrder": "Descending",
         "wrapLogMessage": false
       },
-      "pluginVersion": "10.2.3",
+      "pluginVersion": "12.0.1",
       "targets": [
         {
           "datasource": {
