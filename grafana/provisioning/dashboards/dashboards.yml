@@ -6,6 +6,7 @@ providers:
     folder: "" # 루트 폴더에 대시보드를 생성
     folderUid: ""
     type: file
+    editable: true
     disableSecurityAttribute: false
     options:
       path: /etc/grafana/provisioning/dashboards

@@ -133,7 +133,7 @@
             "uid": "loki"
           },
           "editorMode": "code",
-          "expr": "{service_name=~\".*-API.*\"} |~ `(?i)error` != `\"level\\\":\\\"info\\\"`",
+          "expr": "{service_environment=\"production\"} |~ `(?i)error` != `\"level\\\":\\\"info\\\"`",
           "queryType": "range",
           "refId": "A"
         }

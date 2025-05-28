@@ -1035,17 +1035,17 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "label_values(job)",
+        "definition": "label_values(service_name)",
         "includeAll": true,
-        "name": "job",
+        "name": "ServiceName",
         "options": [],
         "query": {
           "qryType": 1,
-          "query": "label_values(job)",
+          "query": "label_values(service_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
-        "regex": "^backend-.*",
+        "regex": "",
         "type": "query"
       }
     ]
