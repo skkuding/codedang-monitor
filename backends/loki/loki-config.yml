@@ -8,6 +8,8 @@ server:
 distributor:
   otlp_config:
     default_resource_attributes_as_index_labels:
+      - "service.name"
+      - "service.version"
       - "service.environment"
 
 common:
