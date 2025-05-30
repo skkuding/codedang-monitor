@@ -8,8 +8,17 @@ receivers:
     protocols:
       grpc:
         endpoint: 0.0.0.0:4317
-      http:
-        endpoint: 0.0.0.0:4318
+  hostmetrics:
+    scrapers:
+      cpu:
+      disk:
+      filesystem:
+      load:
+      memory:
+      network:
+      process:
+      processes:
+      paging:
 
 # 2. Processor
 # https://opentelemetry.io/docs/collector/configuration/#processors
@@ -21,10 +30,6 @@ processors:
 # 3. Exporter
 # https://opentelemetry.io/docs/collector/configuration/#exporters
 exporters:
-  # debug:
-  #   verbosity: detailed
-
-  # TODO: gRPC 프로토콜로 변경
   otlphttp/logs:
     endpoint: http://loki:3100/otlp
     tls:
@@ -40,7 +45,7 @@ exporters:
     tls:
       insecure: true
 
-# 4. Service
+# Service
 # https://opentelemetry.io/docs/collector/configuration/#service
 service:
   pipelines:
@@ -49,42 +54,10 @@ service:
       processors: [batch]
       exporters: [otlphttp/logs]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, hostmetrics]
       processors: [batch]
       exporters: [prometheus]
     traces:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp/trace]
-
-  # Collector 자체 모니터링을 위한 설정
-  # https://opentelemetry.io/docs/collector/internal-telemetry
-  telemetry:
-    #   metrics:
-    #     level: basic
-    #     readers:
-    #       - periodic:
-    #           exporter:
-    #             prometheus:
-    #               host: prometheus
-    #               port: 9090
-    logs:
-      level: DEBUG
-      development: true
-    #   processors:
-    #     - batch:
-    #         exporter:
-    #           otlp:
-    #             protocol: http/protobuf
-    #             endpoint: http://loki:80/otlp
-  #   traces:
-  #     processors:
-  #       - batch:
-  #           exporter:
-  #             otlp:
-  #               protocol: http/protobuf
-  #               endpoint: https://backend:4318
-# 5. Extensions
-# https://opentelemetry.io/docs/collector/configuration/#extensions
-# extensions:
-#   health_check:
