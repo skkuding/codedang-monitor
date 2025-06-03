@@ -10,7 +10,7 @@ datasources:
     access: proxy
     isDefault: false
     version: 1
-    editable: false
+    editable: true
 
   - name: Loki
     type: loki
@@ -19,7 +19,7 @@ datasources:
     access: proxy
     isDefault: false
     version: 1
-    editable: false
+    editable: true
 
   - name: Tempo
     type: tempo
@@ -28,7 +28,7 @@ datasources:
     basicAuth: false
     isDefault: true
     version: 1
-    editable: false
+    editable: true
     apiVersion: 1
     jsonData:
       httpMethod: GET
