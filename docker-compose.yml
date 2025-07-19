@@ -9,7 +9,7 @@ services:
       - "${ROOT_HTTP_PORT:-80}:80"
       - "${ROOT_HTTPS_PORT:-443}:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./apps/Caddyfile:/etc/caddy/Caddyfile
     command: caddy run --config /etc/caddy/Caddyfile
 
   minio:
@@ -46,7 +46,7 @@ services:
     expose:
       - "3100"
     volumes:
-      - "./backends/loki:/etc/loki"
+      - "./apps/backends/loki:/etc/loki"
     command: -config.file=/etc/loki/loki-config.yml -config.expand-env=true
     depends_on:
       - minio
@@ -58,7 +58,7 @@ services:
     expose:
       - "9090"
     volumes:
-      - "./backends/prometheus:/etc/prometheus"
+      - "./apps/backends/prometheus:/etc/prometheus"
       - prometheus_data_volume:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus-config.yml'
@@ -71,7 +71,7 @@ services:
   #   image: prom/alertmanager
   #   container_name: alertmanager
   #   volumes:
-  #     - "./etc/alertmanager:/etc/alertmanager"
+  #     - "./apps/etc/alertmanager:/etc/alertmanager"
   #   command:
   #     - '--config.file=/etc/alertmanager/config.yml'
   #   expose:
@@ -89,7 +89,7 @@ services:
   #     - "2000"
 
   check-instance:
-    build: ./etc/check-instance
+    build: ./apps/etc/check-instance
     environment:
       - PROMETHEUS_URL
       - MS_WEBHOOK_URL
@@ -111,7 +111,7 @@ services:
       - "3200"
       - "4317"
     volumes:
-      - ./backends/tempo:/etc
+      - ./apps/backends/tempo:/etc
     command:
       - "-config.file=/etc/tempo.yml"
       - "-config.expand-env=true"
@@ -131,7 +131,7 @@ services:
     expose:
       - "8889" # <- prometheus
     volumes:
-      - ./collectors/otel-collector:/etc/otel-collector
+      - ./apps/collectors/otel-collector:/etc/otel-collector
     command:
       - "--config=/etc/otel-collector/config.yml"
     depends_on:
@@ -155,7 +155,7 @@ services:
     expose:
       - "3000"
     volumes:
-      - "./grafana:/etc/grafana"
+      - "./apps/grafana:/etc/grafana"
       - "grafana_storage:/var/lib/grafana"
 
 volumes:
