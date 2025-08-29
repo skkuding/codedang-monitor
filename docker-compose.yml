@@ -152,8 +152,8 @@ services:
       - GH_CLIENT_SECRET
     container_name: grafana
     restart: unless-stopped
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     volumes:
       - "./grafana:/etc/grafana"
       - "grafana_storage:/var/lib/grafana"
