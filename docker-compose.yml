@@ -1,17 +1,4 @@
 services:
-  caddy:
-    image: caddy:alpine
-    restart: always
-    environment:
-      - ROOT_HTTP_PORT
-      - ROOT_HTTPS_PORT
-    ports:
-      - "${ROOT_HTTP_PORT:-80}:80"
-      - "${ROOT_HTTPS_PORT:-443}:443"
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-    command: caddy run --config /etc/caddy/Caddyfile
-
   minio:
     container_name: minio
     image: minio/minio:latest
@@ -153,7 +140,7 @@ services:
     container_name: grafana
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "5000:3000"
     volumes:
       - "./grafana:/etc/grafana"
       - "grafana_storage:/var/lib/grafana"
